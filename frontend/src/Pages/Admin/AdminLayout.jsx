@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import Offer1 from "../../assets/img/offer-1.jpg";
 
-const AdminLayout = () => {
+const AdminLayout = ({adminlogout}) => {
   const [showSidebar, setShowSidebar] = useState(true);
 
   const toggleSidebar = () => {
@@ -48,7 +48,7 @@ const AdminLayout = () => {
     alt="profile"
   />
 
-  <button className="rounded-full border-2 rounded-circle p-2 d-flex align-items-center gap-2">
+  <button className="rounded-full border-2 rounded-circle p-2 d-flex align-items-center gap-2" onClick={adminlogout}>
     <i title="logout" className="fa-solid fa-right-from-bracket"></i>
     
   </button>
