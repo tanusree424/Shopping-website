@@ -12,25 +12,35 @@ import AdminHome from './Pages/Admin/AdminHome'
 import AdminSignup from './Pages/Admin/AdminSignup'
 import AdminLogin from './Pages/Admin/AdminLogin'
 import {Toaster} from "react-hot-toast"
-
+import Users from './Pages/Admin/Users'
+import AdminProtectedRoute from './ProtectedRoute/ProtectedRoute'
+import NotFound from './Pages/NotFound'
 function App() {
  
   return (
     <>
     <Toaster position="top-right" reverseOrder={false} />
-   <Routes>
-  <Route path='/' element={<Home/>} />
-  <Route path='/shop' element={<Shop/>} />
-  <Route path='/cart' element={<Cart/>} />
-  <Route path='/checkout' element={<Checkout/>} />
-  <Route path='/contact' element={<Contact/>} />
+  <Routes>
 
-  <Route path='/admin'>
-    <Route index element={<AdminHome/>} />   {/* default admin page */}
-    <Route path='signup' element={<AdminSignup/>} /> {/* ✅ relative path */}
-    <Route path='login' element={<AdminLogin/>} />
+  {/* Public Routes */}
+  <Route path="/" element={<Home />} />
+  <Route path="/shop" element={<Shop />} />
+  <Route path="/cart" element={<Cart />} />
+  <Route path="/checkout" element={<Checkout />} />
+  <Route path="/contact" element={<Contact />} />
+    <Route path='*' element={<NotFound/>} />
+  {/* Admin Public */}
+  <Route path="/admin/login" element={<AdminLogin />} />
+  <Route path="/admin/signup" element={<AdminSignup />} />
+
+  {/* Admin Protected */}
+  <Route path="/admin" element={<AdminProtectedRoute />}>
+    <Route index element={<AdminHome />} />   {/* /admin */}
+    <Route path="users" element={<Users />} /> {/* /admin/users */}
   </Route>
+
 </Routes>
+
 
     </>
   )

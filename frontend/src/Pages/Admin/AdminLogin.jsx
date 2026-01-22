@@ -22,27 +22,37 @@ const AdminLogin = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-      setLoading(true)
-      const response = await api.post("/api/login", form)
-      console.log(response.data.user)
-      console.log(response.data.user.roles)
-      toast("Login successful")
-      
-      if (response.data?.user?.roles === "admin") {
-        localStorage.setItem("token", response.data.token)
-        localStorage.setItem("user", response.data.user);
-        navigate("/admin")
-      }
-      
-    } catch (error) {
-      console.log(error.response?.data || error.message)
-      toast.error(error.response?.data || error.message)
-    } finally {
-      setLoading(false)
+  e.preventDefault()
+
+  try {
+    setLoading(true)
+
+    const response = await api.post("/api/login", form)
+    console.log(response.data)
+    const user = response.data?.user
+    const roles = user?.roles
+
+    console.log("User:", user)
+    console.log("Roles:", roles)
+
+    if (roles && roles.length > 0 && roles[0].name === "Admin") {
+      localStorage.setItem("token", response.data.token)
+      localStorage.setItem("user", JSON.stringify(user)) // 🔥 stringify mandatory
+      navigate("/admin")
+    } else {
+      toast.error("You are not admin")
     }
+
+    toast.success("Login successful")
+
+  } catch (error) {
+    console.log(error.response?.data || error.message)
+    toast.error(error.response?.data || error.message)
+  } finally {
+    setLoading(false)
   }
+}
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">

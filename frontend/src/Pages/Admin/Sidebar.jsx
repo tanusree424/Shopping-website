@@ -6,7 +6,7 @@ const Sidebar = () => {
     "nav-item flex items-center gap-3 px-4 py-2 text-white text-lg hover:bg-blue-600";
 
   return (
-    <div className="h-screen overflow-auto scroll-smooth bg-gray-800 w-full">
+    <div className=" overflow-auto scroll-smooth bg-gray-800 w-full">
       <h2 className="px-4 py-4 text-white font-bold text-xl text-nowrap">
         <i className="fa-solid fa-gauge-high mr-2"></i>
         Admin Dashboard

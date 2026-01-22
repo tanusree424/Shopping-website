@@ -7,31 +7,34 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    public function signup(Request $request)
-    {
-        $validated  = $request->validate([
-        "name"=>"required|string|max:50",
-        "email"=>"required|email|string|max:50|unique:users,email",
-        "password"=>"required|min:3|confirmed"
-        ]);
-        $existingEmail = User::where("email", $validated["email"])->first();
-        if ($existingEmail) {
-            return response()->json(["message"=>"Email Already Exist"],400);
-        }
+   public function signup(Request $request)
+{
+    $validated = $request->validate([
+        "name" => "required|string|max:50",
+        "email" => "required|email|max:50|unique:users,email",
+        "password" => "required|min:3|confirmed"
+    ]);
 
-        $validated["password"] = \Hash::make($validated["password"]);
+    $validated["password"] = \Hash::make($validated["password"]);
 
-        $user = User::create($validated);
+    $user = User::create($validated);
 
-        return response()->json(["message"=>"User created Successfully", "user"=>$user],201);
-    }
+    // 🔥 EXACT role name from DB
+    $user->assignRole("User");
+
+    return response()->json([
+        "message" => "User created successfully",
+        "user" => $user->load("roles")
+    ], 201);
+}
+
     public function Adminsignup(Request $request)
     {
         $validated  = $request->validate([
         "name"=>"required|string|max:50",
         "email"=>"required|email|string|max:50|unique:users,email",
         "password"=>"required|min:3|confirmed",
-        "roles"=>"required|string|in:admin"
+        // "roles"=>"required|string|in:admin"
         ]);
         $existingEmail = User::where("email", $validated["email"])->first();
         if ($existingEmail) {
@@ -41,8 +44,9 @@ class AuthController extends Controller
         $validated["password"] = \Hash::make($validated["password"]);
 
         $user = User::create($validated);
+        $user->assignRole("Admin");
 
-        return response()->json(["message"=>"Admin Created Successfully", "user"=>$user],201);
+        return response()->json(["message"=>"Admin Created Successfully", "user"=>$user->load("roles")],201);
     }
 
     public function login(Request $request)
@@ -60,7 +64,7 @@ class AuthController extends Controller
               ]);
         }
         $token = $user->createToken("auth_token")->plainTextToken;
-        return response()->json(["message"=>"LoggedIN Successfully", "user"=>$user, "token"=>$token],200);
+        return response()->json(["message"=>"LoggedIN Successfully", "user"=>$user->load("roles"), "token"=>$token],200);
 
     }
 
@@ -69,5 +73,13 @@ class AuthController extends Controller
         $user = $request->user();
         $user->currentAccessToken()->delete();
         return response()->json(["message"=>"Logged Out Successfully"],200);
+    }
+
+    public function me(Request $request){
+       $user = auth()->user();
+       if ($user && $user->hasRole("Admin")) {
+        return response()->json(["message"=>"You Are Admin","user"=>$user->load("roles"), "status"=>true],200);
+       }
+       return response()->json(["message"=>"You are not authenticated to access this page"]);
     }
 }
