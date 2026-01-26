@@ -8,7 +8,7 @@ const Sidebar = () => {
   return (
     <div className=" overflow-auto scroll-smooth bg-gray-800 w-full">
       <h2 className="px-4 py-4 text-white font-bold text-xl text-nowrap">
-        <i className="fa-solid fa-gauge-high mr-2"></i>
+        <i className="fa-solid  fa-gauge-high mr-2"></i>
         Admin Dashboard
       </h2>
 

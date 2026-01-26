@@ -5,6 +5,7 @@ import Offer1 from "../../assets/img/offer-1.jpg";
 import { useNavigate } from 'react-router-dom';
 const AdminHeader = ({toggleSidebar}) => {
   const navigate = useNavigate();
+  const authAdminUser =  JSON.parse(localStorage.getItem("user"))
   
    const adminlogout = async()=>{
     if (window.confirm("Are you sure want to logout?")) {
@@ -38,8 +39,8 @@ const AdminHeader = ({toggleSidebar}) => {
 
               {/* Title */}
               <div className="col-6 text-center">
-                <h2 className="text-2xl font-bold">
-                  Welcome to ShopKart Admin Panel
+                <h2 className="text-lg p-2 font-bold text-nowrap">
+                  Welcome to ShopKart Admin Panel {authAdminUser.name}
                 </h2>
               </div>
 

@@ -15,6 +15,8 @@ import {Toaster} from "react-hot-toast"
 import Users from './Pages/Admin/Users'
 import AdminProtectedRoute from './ProtectedRoute/ProtectedRoute'
 import NotFound from './Pages/NotFound'
+import Roles from './Pages/Admin/Role/Roles'
+import Permissions from './Pages/Admin/Permissions/Permissions.jsx'
 function App() {
  
   return (
@@ -37,6 +39,9 @@ function App() {
   <Route path="/admin" element={<AdminProtectedRoute />}>
     <Route index element={<AdminHome />} />   {/* /admin */}
     <Route path="users" element={<Users />} /> {/* /admin/users */}
+    <Route path="roles" element={<Roles />} /> {/* /admin/roles */}
+    <Route path="permissions" element={<Permissions />} /> {/* /admin/permissions */}
+    <Route path="*" element={<NotFound/>} />
   </Route>
 
 </Routes>

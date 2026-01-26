@@ -16,6 +16,7 @@ class AuthController extends Controller
     ]);
 
     $validated["password"] = \Hash::make($validated["password"]);
+    \Log::info("Creating user with data: ", $validated);
 
     $user = User::create($validated);
 

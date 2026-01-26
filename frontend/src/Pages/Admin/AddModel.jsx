@@ -56,6 +56,8 @@ const AddModel = ({ autoClose, setusers, EditUser = null, isEdit = false }) => {
         );
 
         toast.success("User updated successfully");
+       
+
 
         setusers((prev) =>
           prev.map((u) => (u.id === EditUser.id ? res.data.user : u))

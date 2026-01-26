@@ -26,18 +26,34 @@ class userController extends Controller
 
 public function assignRoles(Request $request, User $user)
 {
-    $request->validate([
-        'roles' => 'required|array',
-        'roles.*' => 'exists:roles,name',  // <-- check here
+   $request->validate([
+    'roles' => ['required', 'array', 'min:1'],
+    'roles.*' => function ($attribute, $value, $fail) {
+        if (!Role::where('name', $value)
+            ->where('guard_name', 'sanctum')
+            ->exists()) {
+            $fail("The role {$value} does not exist for guard sanctum.");
+        }
+    }
+]);
+
+
+    $user->syncRoles($request->roles); // Spatie নিজেই validate করবে
+
+    return response()->json([
+        'message' => 'Roles updated',
+        'user' => $user->load('roles')
     ]);
-
-    $user->syncRoles($request->roles);
-
-    return response()->json(['message' => 'Roles updated', 'user' => $user->load('roles')]);
 }
+
 
 public function editUser(string $id, Request $request)
 {
+    $user = auth()->user();
+    if (!$user->hasRole("Admin")) {
+        return response()->json(["message" => "Unauthorized"], 403);
+    }
+
     if (!$id) {
         return response()->json(["message" => "ID is required"], 400);
     }
@@ -70,6 +86,10 @@ $user->update([
 
 public function deleteUser(string $id)
 {
+    $user = auth()->user();
+    if (!$user->hasRole("Admin")) {
+        return response()->json(["message" => "Unauthorized"], 403);
+    }
     if (!$id) {
         return response()->json(["message" => "ID is required"], 400);
     }

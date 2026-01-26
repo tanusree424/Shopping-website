@@ -32,7 +32,7 @@ const AdminProtectedRoute = () => {
     authRoute()
   }, [token])
 
-  if (isAuth === null) return <AdminLogin/>
+  if (isAuth === null) return null ;
   if (!isAuth) return <AdminLogin />
 
   return <Outlet />

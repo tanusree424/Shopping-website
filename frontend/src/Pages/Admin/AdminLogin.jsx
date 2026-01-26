@@ -1,57 +1,64 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import api from '../Api/Api'
 import { Eye, EyeOff } from "lucide-react"
 import toast from 'react-hot-toast';
-import { Link ,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
-      const [form, setForm] = useState({
-      
-      email: "",
-      password:""
-      
-    })
-    const navigate = useNavigate();
-      const [showPassword, setShowPassword] = useState(false);
-        const [loading, setLoading] = useState(false);
-     const handleChange = (e) => {
+  const [form, setForm] = useState({
+
+    email: "",
+    password: ""
+
+  })
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const handleChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value
     })
   }
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault()
 
+  setLoading(true)
+
   try {
-    setLoading(true)
-
     const response = await api.post("/api/login", form)
-    console.log(response.data)
-    const user = response.data?.user
-    const roles = user?.roles
 
-    console.log("User:", user)
-    console.log("Roles:", roles)
+    const user = response.data.user
+    const roles = user.roles || []
 
-    if (roles && roles.length > 0 && roles[0].name === "Admin") {
-      localStorage.setItem("token", response.data.token)
-      localStorage.setItem("user", JSON.stringify(user)) // 🔥 stringify mandatory
-      navigate("/admin")
-    } else {
+    const roleNames = roles.map(role => role.name)
+    const isAdmin = roleNames.includes("Admin")
+
+    if (!isAdmin) {
       toast.error("You are not admin")
+      return
     }
+
+    localStorage.setItem("token", response.data.token)
+    localStorage.setItem("user", JSON.stringify(user))
 
     toast.success("Login successful")
 
+    // 🔥 ensure redirect happens
+    setTimeout(() => {
+      navigate("/admin", { replace: true })
+    }, 300)
+
   } catch (error) {
-    console.log(error.response?.data || error.message)
-    toast.error(error.response?.data || error.message)
+    toast.error(
+      error.response?.data?.message || "Login failed"
+    )
   } finally {
     setLoading(false)
   }
 }
+
 
 
   return (
@@ -64,7 +71,7 @@ const AdminLogin = () => {
           Admin Login
         </h2>
 
-     
+
 
         {/* Email */}
         <div className="mb-4">
@@ -108,8 +115,8 @@ const AdminLogin = () => {
           </div>
         </div>
 
-   
-    
+
+
 
         {/* Button */}
         <button
@@ -118,7 +125,7 @@ const AdminLogin = () => {
         >
           {loading ? "Loging..." : "Login"}
         </button>
-      <p> Don't have an account ?<Link to={"/admin/signup"} className='text-blue-400 font-bold' >signup</Link> </p> 
+        <p> Don't have an account ?<Link to={"/admin/signup"} className='text-blue-400 font-bold' >signup</Link> </p>
       </form>
     </div>
   )

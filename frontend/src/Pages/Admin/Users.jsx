@@ -5,7 +5,8 @@ import Sidebar from "./Sidebar";
 import AddModel from "./AddModel";
 import toast from "react-hot-toast";
 import AdminHeader from "./AdminHeader";
-
+import { Eye, PencilIcon , Trash2Icon } from "lucide-react";
+import ViewModel from "./ViewModel";
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,6 +14,8 @@ const Users = () => {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [editUser, setEditUser] = useState(null);
+  const [openViewModal, setopenViewModal] = useState(false);
+  const [ViewUser, setViewUser] = useState(null)
 
   /* ================= FETCH USERS ================= */
   const fetchUsers = async () => {
@@ -99,7 +102,11 @@ const Users = () => {
       toast.error(error?.response?.data?.message || error.message);
     }
   };
+ const handleview = async (row) => {
+  setopenViewModal(true);
+  setViewUser(row)
 
+ }
   /* ================= TABLE COLUMNS ================= */
   const columns = [
     {
@@ -172,15 +179,22 @@ const Users = () => {
         <div className="flex gap-2">
           <button
             onClick={() => handleEdit(row)}
-            className="px-3 py-1 text-sm bg-green-500 text-white rounded"
+            className="px-2 py-1 text-sm bg-green-500 text-white rounded"
           >
-            Edit
+            <PencilIcon/>
+          </button>
+          
+          <button
+            onClick={() => handleview(row)}
+            className="px-2 py-1 text-sm bg-sky-400 text-white rounded"
+          >
+            <Eye/>
           </button>
           <button
             onClick={() => handleDelete(row.id)}
-            className="px-3 py-1 text-sm bg-red-500 text-white rounded"
+            className="px-2 py-1 text-sm bg-red-500 text-white rounded"
           >
-            Delete
+            <Trash2Icon/>
           </button>
         </div>
       ),
@@ -242,6 +256,10 @@ const Users = () => {
           setusers={setUsers}
         />
       )}
+      {
+        openViewModal &&
+       ( <ViewModel autoClose={()=>setopenViewModal(false)} ViewUser={ViewUser}/> )
+      }
     </div>
   );
 };
