@@ -6,6 +6,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\userController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
+ use App\Http\Controllers\CategoryController;
+ use App\Http\Controllers\BrandController;
+ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,6 +22,10 @@ use App\Http\Controllers\PermissionController;
 Route::post("/signup",[AuthController::class,"signup"]);
 Route::post("/admin/signup",[AuthController::class,"Adminsignup"]);
 Route::post("/login",[AuthController::class,"login"]);
+Route::get('/cloudinary-test', function () {
+    return Cloudinary::getConfiguration();
+});
+
  
 Route::middleware('auth:sanctum')->prefix("admin")->group(function () {
  //Auth Routes
@@ -30,6 +37,12 @@ Route::middleware('auth:sanctum')->prefix("admin")->group(function () {
   Route::apiResource("/roles",RoleController::class);  
   Route::post("/{role}/assign-permission",[RoleController::class,"AssignPermissions"]);
   Route::post("/{role}/remove-permission",[RoleController::class,"RemovePermissions"]);
+  // Category Management Routes
+ Route::apiResource('categories', CategoryController::class);
+
+ // Brand Management Routes
+  Route::apiResource('brands', BrandController::class);
+
   // User Management Routes
   Route::get("/users", [userController::class, "users"]);
   Route::put("/users/{id}", [userController::class, "editUser"]);

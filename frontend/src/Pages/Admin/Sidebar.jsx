@@ -59,6 +59,13 @@ const Sidebar = () => {
         </li>
 
         <li>
+          <Link to="/admin/brands" className={menuItem}>
+            <i className="fa-solid fa-tags"></i>
+            Brands
+          </Link>
+        </li>
+
+        <li>
           <Link to="/admin/orders" className={menuItem}>
             <i className="fa-solid fa-cart-shopping"></i>
             Orders
