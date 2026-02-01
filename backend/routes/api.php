@@ -8,7 +8,9 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
  use App\Http\Controllers\CategoryController;
  use App\Http\Controllers\BrandController;
+ use App\Http\Controllers\AdminProductController;
  use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+ 
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -42,6 +44,9 @@ Route::middleware('auth:sanctum')->prefix("admin")->group(function () {
 
  // Brand Management Routes
   Route::apiResource('brands', BrandController::class);
+
+  // Product Management
+  Route::apiResource("products", AdminProductController::class);
 
   // User Management Routes
   Route::get("/users", [userController::class, "users"]);

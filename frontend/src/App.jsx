@@ -19,6 +19,7 @@ import Roles from './Pages/Admin/Role/Roles'
 import Permissions from './Pages/Admin/Permissions/Permissions.jsx'
 import Categories from './Pages/Admin/Categories/Categories.jsx'
 import Brands from './Pages/Admin/Brands/Brands.jsx'
+import Products from './Pages/Admin/Products/Products.jsx'
 function App() {
  
   return (
@@ -45,6 +46,7 @@ function App() {
     <Route path="permissions" element={<Permissions />} /> {/* /admin/permissions */}
     <Route path="categories" element={<Categories />} /> {/* /admin/categories */}
     <Route path="brands" element={<Brands />} /> {/* /admin/brands */}
+     <Route path="products" element={<Products />} /> {/* /admin/products */}
     <Route path="*" element={<NotFound/>} />
   </Route>
 
