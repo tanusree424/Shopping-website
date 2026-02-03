@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
 use App\Models\Brand;
 use App\Models\ProductImage;
+use App\Models\ProductVariant;
 class Product extends Model
 {
     use HasFactory;
@@ -27,6 +28,11 @@ class Product extends Model
     {
         return $this->hasMany(ProductImage::class, "product_id");
     }
+    public function variants()
+{
+    return $this->hasMany(ProductVariant::class);
+}
+
 
         
     }

@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import { useSelector, useDispatch } from "react-redux";
+import { fetchCategories } from "../redux/Slices/CategorySlice";
 const HeaderNavBar = () => {
   const [open, setOpen] = useState(false);
+  const [activeParent, setActiveParent] = useState(null);
 
+  const { categories, loading } = useSelector((state) => state.categories);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchCategories())
+  }, [dispatch])
+  console.log(categories)
+  useEffect(() => {
+    console.log("Redux Categories:", categories);
+  }, [categories]);
   return (
     <div className="container-fluid bg-dark mb-30">
       <div className="row px-xl-5">
@@ -11,7 +22,7 @@ const HeaderNavBar = () => {
         <div className="col-lg-3 d-none d-lg-block position-relative">
           <div
             className="btn d-flex align-items-center justify-content-between bg-primary w-100 py-3"
-  style={{ paddingLeft: "20px", height:"100px", paddingRight: "20px", cursor: "pointer" }}
+            style={{ paddingLeft: "20px", height: "100px", paddingRight: "20px", cursor: "pointer" }}
             onClick={() => setOpen(!open)}
           >
             <h6 className="text-dark m-0">
@@ -28,28 +39,54 @@ const HeaderNavBar = () => {
               style={{ width: "100%", zIndex: 999 }}
             >
               <div className="navbar-nav w-100">
-                <span className="nav-item nav-link font-weight-bold">
-                  Dresses
-                </span>
 
-                <Link to="/shirts" className="nav-item nav-link">
-                  Shirts
-                </Link>
-                <Link to="/jeans" className="nav-item nav-link">
-                  Jeans
-                </Link>
-                <Link to="/shoes" className="nav-item nav-link">
-                  Shoes
-                </Link>
-                <Link href="" class="nav-item nav-link">Swimwear</Link>
-                        <Link to="" class="nav-item nav-link">Sleepwear</Link>
-                        <Link to="" class="nav-item nav-link">Sportswear</Link>
-                        <Link to="" class="nav-item nav-link">Jumpsuits</Link>
-                        <Link to="" class="nav-item nav-link">Blazers</Link>
-                        <Link to="" class="nav-item nav-link">Jackets</Link>
+                {loading && (
+                  <span className="nav-item nav-link">Loading...</span>
+                )}
+
+                {!loading &&
+                  categories.map((parent) => (
+                    <div key={parent.id} className="border-bottom">
+
+                      {/* Parent */}
+                      <div
+                        className="d-flex justify-content-between align-items-center nav-item nav-link font-weight-bold text-dark"
+                        style={{ cursor: "pointer" }}
+                        onClick={() =>
+                          setActiveParent(
+                            activeParent === parent.id ? null : parent.id
+                          )
+                        }
+                      >
+                        <span>{parent.name}</span>
+                        <i
+                          className={`fa fa-angle-${activeParent === parent.id ? "up" : "down"
+                            }`}
+                        ></i>
+                      </div>
+
+                      {/* ✅ Children from parent.children */}
+                      {activeParent === parent.id &&
+                        parent.children?.map((child) => (
+                          <Link
+                            key={child.id}
+                            to={`/category/${child.slug}`}
+                            className="nav-item nav-link pl-4"
+                            onClick={() => setOpen(false)}
+                          >
+                            {child.name}
+                          </Link>
+                        ))}
+                    </div>
+                  ))}
               </div>
             </div>
           )}
+
+
+
+
+
         </div>
 
         {/* Navbar */}
@@ -82,16 +119,16 @@ const HeaderNavBar = () => {
               </Link>
             </div>
 
-           <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-                            <Link to="" className="btn px-0">
-                                <i className="fas fa-heart text-primary"></i>
-                                <span className="badge text-secondary border border-secondary rounded-circle" style={{"paddingBottom": "2px"}}>0</span>
-                            </Link>
-                            <Link to="" className="btn px-0 ml-3">
-                                <i className="fas fa-shopping-cart text-primary"></i>
-                                <span className="badge text-secondary border border-secondary rounded-circle" style={{"paddingBottom": "2px"}}>0</span>
-                            </Link>
-                        </div>
+            <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
+              <Link to="" className="btn px-0">
+                <i className="fas fa-heart text-primary"></i>
+                <span className="badge text-secondary border border-secondary rounded-circle" style={{ "paddingBottom": "2px" }}>0</span>
+              </Link>
+              <Link to="" className="btn px-0 ml-3">
+                <i className="fas fa-shopping-cart text-primary"></i>
+                <span className="badge text-secondary border border-secondary rounded-circle" style={{ "paddingBottom": "2px" }}>0</span>
+              </Link>
+            </div>
           </nav>
         </div>
       </div>

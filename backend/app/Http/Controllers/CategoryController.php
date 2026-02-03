@@ -11,11 +11,22 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        if (!auth()->user()->hasRole("Admin") && !auth()->user()->hasPermission("view categories")) {
-            return response()->json(["message"=>"Unauthorized"],403);
-        }
+      
         $categories = Category::all();
         return response()->json($categories);
+    }
+
+    public function fetchAllCategories()
+    {
+        $categories = Category::with('children')
+        ->whereNull('parent_id')
+        ->orderBy('name')
+        ->get();
+
+    return response()->json([
+        'status' => true,
+        'data' => $categories
+    ]);
     }
 
     /**

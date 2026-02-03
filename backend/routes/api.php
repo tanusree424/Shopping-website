@@ -24,6 +24,11 @@ use App\Http\Controllers\PermissionController;
 Route::post("/signup",[AuthController::class,"signup"]);
 Route::post("/admin/signup",[AuthController::class,"Adminsignup"]);
 Route::post("/login",[AuthController::class,"login"]);
+
+// Public Routes
+ Route::get('/categories', [CategoryController::class, "fetchAllCategories"]);
+ 
+
 Route::get('/cloudinary-test', function () {
     return Cloudinary::getConfiguration();
 });
@@ -40,13 +45,14 @@ Route::middleware('auth:sanctum')->prefix("admin")->group(function () {
   Route::post("/{role}/assign-permission",[RoleController::class,"AssignPermissions"]);
   Route::post("/{role}/remove-permission",[RoleController::class,"RemovePermissions"]);
   // Category Management Routes
- Route::apiResource('categories', CategoryController::class);
+Route::apiResource('categories', CategoryController::class);
 
  // Brand Management Routes
   Route::apiResource('brands', BrandController::class);
 
   // Product Management
   Route::apiResource("products", AdminProductController::class);
+  Route::post("/is_featured/{productId}", [AdminProductController::class , "isFeatured"]);
 
   // User Management Routes
   Route::get("/users", [userController::class, "users"]);

@@ -9,6 +9,7 @@ use App\Models\Product;
 class Category extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'slug',
@@ -16,12 +17,21 @@ class Category extends Model
         'parent_id',
     ];
 
+    // 🔹 Parent category
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id');
     }
-     public function products()
+
+    // 🔹 Child categories
+    public function children()
     {
-        return $this->hasOne(Products::class, 'parent_id');
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    // 🔹 Category has many products
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'category_id');
     }
 }
