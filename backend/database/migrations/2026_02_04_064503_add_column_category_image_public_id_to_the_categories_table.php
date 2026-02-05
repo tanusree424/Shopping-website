@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->string("category_image")->nullable();
-            $table->string("category_slug")->nullable()->unique();
+            $table->string("category_image_public_id")->nullable()->after("category_image");
         });
     }
 

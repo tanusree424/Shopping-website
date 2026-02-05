@@ -26,7 +26,8 @@ Route::post("/admin/signup",[AuthController::class,"Adminsignup"]);
 Route::post("/login",[AuthController::class,"login"]);
 
 // Public Routes
- Route::get('/categories', [CategoryController::class, "fetchAllCategories"]);
+ Route::get('/parent-categories', [CategoryController::class, "fetchParentCategories"]);
+ Route::get("/categories", [CategoryController::class ,"fetchAllCategories"]);
  
 
 Route::get('/cloudinary-test', function () {

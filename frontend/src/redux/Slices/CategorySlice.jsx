@@ -4,7 +4,7 @@ import api from "../../Pages/Api/Api"
 export const fetchCategories = createAsyncThunk(
     "categories/fetch",
     async () =>{
-        const response = await api.get("/api/categories");
+        const response = await api.get("/api/parent-categories");
        // console.log(response.data)
         return response.data
     }
