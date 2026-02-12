@@ -11,31 +11,47 @@ use App\Models\ProductVariant;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','slug','price','description','short_desc',
-    'discount_price','sku','category_id','brand_id','stock'];
+
+    protected $fillable = [
+        'name','slug','price','description','short_desc',
+        'discount_price','sku','category_id','brand_id','stock'
+    ];
 
     public function category()
     {
         return $this->belongsTo(Category::class);
-
     }
+
     public function brand()
     {
         return $this->belongsTo(Brand::class);
-        
     }
+
+    // Product-level images
     public function images()
     {
-        return $this->hasMany(ProductImage::class, "product_id");
+        return $this->hasMany(ProductImage::class, 'product_id');
     }
+
+    // Variants
     public function variants()
-{
-    return $this->hasMany(ProductVariant::class);
-}
-
-
-        
+    {
+        return $this->hasMany(ProductVariant::class);
     }
+
+    // If you want direct access to variant images through product
+    public function variantImages()
+    {
+        return $this->hasManyThrough(
+            ProductVariantImage::class,
+            ProductVariant::class,
+            'product_id',        // Foreign key on ProductVariant
+            'product_variant_id',// Foreign key on ProductVariantImage
+            'id',                // Local key on Product
+            'id'                 // Local key on ProductVariant
+        );
+    }
+}
 
     
 

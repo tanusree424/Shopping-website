@@ -1,23 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
-
+import "../assets/css/productImage.css"
 import "swiper/css";
 
-import vendor1 from "../assets/img/vendor-1.jpg";
-import vendor2 from "../assets/img/vendor-2.jpg";
-import vendor3 from "../assets/img/vendor-3.jpg";
-import vendor4 from "../assets/img/vendor-4.jpg";
-import vendor5 from "../assets/img/vendor-5.jpg";
-import vendor6 from "../assets/img/vendor-6.jpg";
-import vendor7 from "../assets/img/vendor-7.jpg";
-import vendor8 from "../assets/img/vendor-8.jpg";
+
+import api from "./Api/Api";
 
 const Vendors = () => {
-  const vendors = [
-    vendor1, vendor2, vendor3, vendor4,
-    vendor5, vendor6, vendor7, vendor8
-  ];
+
+  const [vendors, setVendors] = useState();
+  const fecthAllBrands = async (params) => {
+    try {
+      const response = await api.get("/api/brands")
+      console.log(response.data.brands)
+      setVendors(response.data.brands)
+    } catch (error) {
+      console.log(error?.response?.data?.message)
+    }
+  }
+  useEffect(() => {
+    fecthAllBrands()
+  }, [])
+
 
   return (
     <div className="container-fluid py-5">
@@ -35,10 +40,14 @@ const Vendors = () => {
             992: { slidesPerView: 5 },
           }}
         >
-          {vendors.map((img, index) => (
+          {vendors?.map((vendor, index) => (
             <SwiperSlide key={index}>
-              <div className="bg-light p-4 text-center">
-                <img src={img} alt="vendor" className="img-fluid" />
+              <div className="product-img position-relative bg-white overflow-hidden fixed-img-wrapper">
+                <img
+                  className="img-fluid w-100 fixed-product-img"
+                  src={vendor?.logo}
+                  alt=""
+                />
               </div>
             </SwiperSlide>
           ))}

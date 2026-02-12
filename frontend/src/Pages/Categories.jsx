@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react'
+import { Link } from 'react-router-dom'
 import cat1 from "../assets/img/cat-1.jpg"
 import {useSelector , useDispatch} from "react-redux"
 import { fetchAllCategories } from '../redux/Slices/AllCategoriesSlice'
@@ -10,7 +11,7 @@ const Categories = () => {
     dispatch(fetchAllCategories())
      
     }, [dispatch])
-    console.log(allCategories)
+   // console.log(allCategories)
   return (
     <div className="container-fluid pt-5">
         <h2 className="section-title position-relative text-uppercase mx-xl-5 mb-4"><span className="bg-secondary pr-3">Categories</span></h2>
@@ -19,7 +20,7 @@ const Categories = () => {
                 allCategories.map((cat,item)=>(
                     <>
                     <div className="col-lg-3 col-md-4 col-sm-6 pb-1" key={item+1}>
-                <a className="text-decoration-none" href="">
+                <Link className="text-decoration-none" to={`/category/${cat.slug}`}>
                     <div className="cat-item img-zoom d-flex align-items-center mb-4">
                         <div className="overflow-hidden" style={{"width": "100px", "height": "100px"}}>
                             <img className="img-fluid" src={cat.category_image} alt=""/>
@@ -29,7 +30,7 @@ const Categories = () => {
                             <small className="text-body">100 Products</small>
                         </div>
                     </div>
-                </a>
+                </Link>
             </div>
                     </>
                 )) 

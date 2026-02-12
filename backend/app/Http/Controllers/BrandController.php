@@ -12,13 +12,13 @@ class BrandController extends Controller
      */
     public function index()
     {
-        if (auth()->user()->hasRole("Admin")  ) {
+        
             $brands = Brand::all();
             return response()->json([
                 "message"=>"AllBrands",
                 "brands"=>$brands
             ]);
-        }
+        
         return response()->json(["message"=>"Unauthorized"],403);
     }
 

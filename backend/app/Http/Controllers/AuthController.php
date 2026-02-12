@@ -19,9 +19,10 @@ class AuthController extends Controller
     \Log::info("Creating user with data: ", $validated);
 
     $user = User::create($validated);
+   
 
     // 🔥 EXACT role name from DB
-    $user->assignRole("User");
+   // $user->assignRole("user");
 
     return response()->json([
         "message" => "User created successfully",
@@ -69,12 +70,39 @@ class AuthController extends Controller
 
     }
 
-    public function logout(Request $request)
-    {
-        $user = $request->user();
+    public function adminLogout(Request $request)
+{
+    $user = $request->user();
+
+    if ($user && $user->hasRole("Admin")) {
         $user->currentAccessToken()->delete();
-        return response()->json(["message"=>"Logged Out Successfully"],200);
+
+        return response()->json([
+            "message" => "Admin Logged Out Successfully"
+        ], 200);
     }
+
+    return response()->json([
+        "message" => "Unauthorized - Only Admin can logout here"
+    ], 403);
+}
+
+    public function userLogout(Request $request)
+{
+    $user = $request->user();
+
+    if ($user && $user->hasRole("User")) {
+        $user->currentAccessToken()->delete();
+
+        return response()->json([
+            "message" => "User Logged Out Successfully"
+        ], 200);
+    }
+
+    return response()->json([
+        "message" => "Unauthorized - Only User can logout here"
+    ], 403);
+}
 
     public function me(Request $request){
        $user = auth()->user();

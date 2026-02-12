@@ -7,13 +7,15 @@ const HeaderNavBar = () => {
   const [activeParent, setActiveParent] = useState(null);
 
   const { categories, loading } = useSelector((state) => state.categories);
+  const token = localStorage.getItem("userToken")
+  const user = localStorage.getItem("userData")
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchCategories())
   }, [dispatch])
-  console.log(categories)
+  //console.log(categories)
   useEffect(() => {
-    console.log("Redux Categories:", categories);
+   // console.log("Redux Categories:", categories);
   }, [categories]);
   return (
     <div className="container-fluid bg-dark mb-30">
@@ -45,8 +47,8 @@ const HeaderNavBar = () => {
                 )}
 
                 {!loading &&
-                  categories.map((parent) => (
-                    <div key={parent.id} className="border-bottom">
+                  categories.map((parent,i) => (
+                    <div key={i+1} className="border-bottom">
 
                       {/* Parent */}
                       <div
@@ -108,9 +110,17 @@ const HeaderNavBar = () => {
               <Link to="/shop" className="nav-item nav-link">
                 Shop
               </Link>
+              {
+                token && user ?
               <Link to="/cart" className="nav-item nav-link">
                 Cart
               </Link>
+              : <>
+               <Link to="/products" className="nav-item nav-link">
+                Products
+              </Link>
+              </>
+              }
               <Link to="/checkout" className="nav-item nav-link">
                 Checkout
               </Link>
