@@ -21,43 +21,43 @@ const AdminLogin = () => {
     })
   }
 
- const handleSubmit = async (e) => {
-  e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault()
 
-  setLoading(true)
+    setLoading(true)
 
-  try {
-    const response = await api.post("/api/login", form)
+    try {
+      const response = await api.post("/api/login", form)
 
-    const user = response.data.user
-    const roles = user.roles || []
+      const user = response.data.user
+      const roles = user.roles || []
 
-    const roleNames = roles.map(role => role.name)
-    const isAdmin = roleNames.includes("Admin")
+      const roleNames = roles.map(role => role.name)
+      const isAdmin = roleNames.includes("Admin")
 
-    if (!isAdmin) {
-      toast.error("You are not admin")
-      return
+      if (!isAdmin) {
+        toast.error("You are not admin")
+        return
+      }
+      localStorage.setItem("adminToken", response.data.token);
+      localStorage.setItem("adminData", JSON.stringify(response.data.user));
+
+
+      toast.success("Login successful")
+
+      // 🔥 ensure redirect happens
+      setTimeout(() => {
+        navigate("/admin", { replace: true })
+      }, 300)
+
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Login failed"
+      )
+    } finally {
+      setLoading(false)
     }
-
-    localStorage.setItem("token", response.data.token)
-    localStorage.setItem("user", JSON.stringify(user))
-
-    toast.success("Login successful")
-
-    // 🔥 ensure redirect happens
-    setTimeout(() => {
-      navigate("/admin", { replace: true })
-    }, 300)
-
-  } catch (error) {
-    toast.error(
-      error.response?.data?.message || "Login failed"
-    )
-  } finally {
-    setLoading(false)
   }
-}
 
 
 

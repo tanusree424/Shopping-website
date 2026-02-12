@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { replace, useNavigate } from 'react-router-dom'
 import { LogOut } from 'lucide-react';
 import api from './Api/Api';
 import toast from 'react-hot-toast';
@@ -19,30 +19,29 @@ const Topbar = () => {
     const handleLogout = async () => {
   if (window.confirm("Are you sure you want to logout?")) {
     try {
-      const response = await api.get("/api/logout",  {
-        headers: { Authorization: `Bearer ${token}` }
+      await api.get("/api/logout", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` }
       });
 
-      toast.success(response.data.message);
+      toast.success("Logged out successfully");
 
-      // যদি user data আসে
-      if (response.data.user && response.data.user.roles.some(role => role.name === "User")) {
-        localStorage.clear();
-        navigate("/");
-      } else if (response.data.user && response.data.user.roles.some(role => role.name === "Admin")) {
-        localStorage.clear();
-        navigate("/adminLogin");
-      } else {
-        localStorage.clear();
-        navigate("/");
-      }
+      // ✅ Clear all auth related storage
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("userData");
+      localStorage.removeItem("role");
+      localStorage.removeItem("user"); // 🔥 important (admin data remove করবে)
+
+      // ✅ Force full reset
+      window.location.href = "/";
 
     } catch (error) {
       console.error(error?.response?.data?.message || error?.message);
-      toast.error(error?.response?.data?.message || "Logout failed");
+      toast.error("Logout failed");
     }
   }
 };
+
+
     return (
         <div className="container-fluid">
             <div className="row bg-secondary py-1 px-xl-5">
@@ -58,20 +57,20 @@ const Topbar = () => {
                     <div className="d-inline-flex align-items-center">
                         <div className="btn-group">
                             {
-                                user && role ==="user"  ?
-                                <>
-                                 <button type="button" onClick={()=>handleLogout()} className="px-2 flex py-2 border-0  bg-yellow-200 "><LogOut/> Logout</button>
-                                </>
-                          
-                        :
-                        <>
-                        <button type="button" className="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
-                        <div className="dropdown-menu dropdown-menu-right">
-                            <button onClick={()=> handleNavigateToLogin()} className="dropdown-item" type="button">Sign in</button>
-                            <button onClick={()=> handleNavigateToSignUp()} className="dropdown-item" type="button">Sign up</button>
-                        </div>
-                        </>
-                                }
+                                user && role === "user" ?
+                                    <>
+                                        <button type="button" onClick={() => handleLogout()} className="px-2 flex py-2 border-0  bg-yellow-200 "><LogOut /> Logout</button>
+                                    </>
+
+                                    :
+                                    <>
+                                        <button type="button" className="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
+                                        <div className="dropdown-menu dropdown-menu-right">
+                                            <button onClick={() => handleNavigateToLogin()} className="dropdown-item" type="button">Sign in</button>
+                                            <button onClick={() => handleNavigateToSignUp()} className="dropdown-item" type="button">Sign up</button>
+                                        </div>
+                                    </>
+                            }
                         </div>
                         <div className="btn-group mx-2">
                             <button type="button" className="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">USD</button>
