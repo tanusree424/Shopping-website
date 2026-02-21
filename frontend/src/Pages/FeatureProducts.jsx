@@ -8,7 +8,7 @@ const FeatureProducts = () => {
     const fetchFeaturedProducts = async () => {
         try {
             const response = await api.get("/api/featured");
-            console.log(response.data)
+          //  console.log(response.data)
             setFeaturedProducts(response.data)
         } catch (error) {
             console.log(error.message)

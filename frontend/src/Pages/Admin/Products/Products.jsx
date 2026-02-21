@@ -20,7 +20,7 @@ const Products = () => {
       const response = await api.get("/api/admin/products", {
         headers: {
           Accept: "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`
         }
       });
       // console.log(response.data.products);

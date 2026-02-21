@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Product;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 class CategoryController extends Controller
 {
@@ -171,23 +172,20 @@ class CategoryController extends Controller
         return response()->json(["message"=>"Category deleted successfully"],200);
     }
 
-   public function fetchCategoryWiseProducts(string $slug)
+  public function getProductsBySlug($slug)
 {
-    if (!$slug) {
-        return response()->json(["message" => "Slug not found"], 404);
+    $category = Category::where('slug', $slug)->firstOrFail();
+
+    if ($category->parent_id == null) {
+        // Parent Category
+        $childIds = Category::where('parent_id', $category->id)->pluck('id');
+
+        $products = Product::with('images','variants.images')->whereIn('category_id', $childIds)->get();
+    } else {
+        // Child Category
+        $products = Product::with('images','variants.images')->where('category_id', $category->id)->get();
     }
 
-    // Only fetch categories that match slug AND have a parent_id
-   $category_products = Category::where("slug", $slug)
-    ->whereNotNull("parent_id")   // optional filter
-    ->with("products.images")
-    ->first();
-
-if (!$category_products) {
-    return response()->json(["message" => "Category not found"], 404);
-}
-
-return response()->json($category_products);
-
+    return response()->json($products);
 }
 }

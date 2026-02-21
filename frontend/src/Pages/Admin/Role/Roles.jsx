@@ -22,14 +22,14 @@ const Roles = () => {
 
   const fetchRoles = async () => {
     const res = await api.get("/api/admin/roles", {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` }
     });
     setRoles(res.data.roles);
   };
 
   const fetchPermissions = async () => {
     const res = await api.get("/api/admin/permissions", {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` }
     });
     setPermissions(res.data.permissions);
   };

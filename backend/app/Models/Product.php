@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Brand;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
+use App\Models\Cart;
 class Product extends Model
 {
     use HasFactory;
@@ -50,6 +51,11 @@ class Product extends Model
             'id',                // Local key on Product
             'id'                 // Local key on ProductVariant
         );
+    }
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
     }
 }
 

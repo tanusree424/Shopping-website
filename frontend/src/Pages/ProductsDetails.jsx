@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { addToCart } from '../redux/Slices/CartSlice';
 import Footer from './Footer';
 
-const AllProducts = () => {
+const ProductsDetails = () => {
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [similarProducts, setSimilarProducts] = useState([]);
@@ -32,10 +32,33 @@ const AllProducts = () => {
     setSelectedVariant(null);
   }, [slug]);
 
-  const handleAddToCart = (productDetails) => {
-    toast.success("Product Added to Cart");
+const handleAddToCart = async (productDetails) => {
+  try {
+    const response = await api.post("/api/add-to-cart", {
+      product_id: productDetails.id,
+      quantity: 1,
+    } , {
+      headers:
+      {
+      Authorization : `Bearer ${localStorage.getItem("userToken")}`
+    }});
+
+    toast.success(response.data.message);
+
+    // চাইলে redux update করতে পারো
     dispatch(addToCart(productDetails));
-  };
+
+  } catch (error) {
+    console.log(error);
+
+    if (error.response?.status === 401) {
+      toast.error("Please login first");
+    } else {
+      console.log(error.response);
+  console.log(error.response.data);
+    }
+  }
+};
 
   const handleColorSelect = (color) => {
     setSelectedColor(color);
@@ -221,4 +244,4 @@ console.log(product)
   );
 };
 
-export default AllProducts;
+export default ProductsDetails;

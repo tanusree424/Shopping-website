@@ -19,11 +19,12 @@ import Roles from './Pages/Admin/Role/Roles'
 import Permissions from './Pages/Admin/Permissions/Permissions.jsx'
 import Categories from './Pages/Admin/Categories/Categories.jsx'
 import Brands from './Pages/Admin/Brands/Brands.jsx'
-import Products from './Pages/Admin/Products/Products.jsx'
+import Products from "./Pages/Admin/Products/Products.jsx"
 import CategoryProducts from './Pages/CategoryProducts.jsx'
-import AllProducts from './Pages/AllProducts.jsx'
+import ProductsDetails from './Pages/ProductsDetails.jsx'
 import Signup from './Pages/Signup.jsx'
 import Login from "./Pages/Login.jsx"
+import AdminBanner from './Pages/Admin/Banner/AdminBanner.jsx'
 function App() {
  
   return (
@@ -38,8 +39,9 @@ function App() {
   <Route path="/checkout" element={<Checkout />} />
   <Route path="/contact" element={<Contact />} />
     <Route path='*' element={<NotFound/>} />
-    <Route path='category/:slug' element={<CategoryProducts/>} />
-    <Route path='/products/:slug' element={<AllProducts/>}/>
+    <Route path='category/:category_slug' element={<CategoryProducts/>} />
+    <Route path='/products/:slug' element={<ProductsDetails/>}/>
+    <Route path='/brands/:brand_slug' element={<CategoryProducts/>}/>
     <Route path="signup" element={<Signup />} /> 
     <Route path="login" element={<Login />} /> 
   {/* Admin Public */}
@@ -56,7 +58,7 @@ function App() {
     <Route path="categories" element={<Categories />} /> {/* /admin/categories */}
     <Route path="brands" element={<Brands />} /> {/* /admin/brands */}
      <Route path="products" element={<Products />} /> {/* /admin/products */}
-     
+     <Route path='banner' element={<AdminBanner/>} />
     <Route path="*" element={<NotFound/>} />
   </Route>
 

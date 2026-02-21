@@ -64,7 +64,11 @@ const Sidebar = () => {
             Brands
           </Link>
         </li>
-
+        <li>
+          <Link to={"/admin/banner"} className={menuItem} >
+    <i className="fa fa-image"></i> Banners
+    </Link>
+</li>
         <li>
           <Link to="/admin/orders" className={menuItem}>
             <i className="fa-solid fa-cart-shopping"></i>

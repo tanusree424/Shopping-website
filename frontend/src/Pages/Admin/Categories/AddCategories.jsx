@@ -43,7 +43,7 @@ const AddCategories = ({ onClose, fetchCategories, categories, categoryData }) =
                 formData.append("_method", "PUT");
                 response = await api.post(`/api/admin/categories/${categoryData.id}`, formData, {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
                     },
                 });
                 toast.success(response.data.message || "Category Updated Successfully");

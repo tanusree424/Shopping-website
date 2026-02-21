@@ -18,7 +18,7 @@ const Categories = () => {
             try {
                 const response = await api.get('/api/admin/categories', {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
                     },
                 });
                // const data = await response.json();

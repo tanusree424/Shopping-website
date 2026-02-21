@@ -15,7 +15,7 @@ const Permissions = () => {
     try {
       const response = await api.get("/api/admin/permissions", {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
         },
         });
         setPermissions(response.data.permissions);
@@ -31,7 +31,7 @@ const Permissions = () => {
           try {
             const response = await api.delete(`/api/admin/permissions/${permission.id}`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
                 },
             }); 
             console.log(response.data);

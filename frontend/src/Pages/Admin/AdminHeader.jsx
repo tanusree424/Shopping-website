@@ -5,7 +5,7 @@ import Offer1 from "../../assets/img/offer-1.jpg";
 import { useNavigate } from 'react-router-dom';
 const AdminHeader = ({toggleSidebar}) => {
   const navigate = useNavigate();
-  const authAdminUser =  JSON.parse(localStorage.getItem("user"))
+  const authAdminUser =  JSON.parse(localStorage.getItem("adminData"))
   
    const adminlogout = async()=>{
     if (window.confirm("Are you sure want to logout?")) {

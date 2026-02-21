@@ -80,11 +80,11 @@ console.log(previewVariantImages)
   /* ================== FETCH DATA ================== */
   useEffect(() => {
     api.get("/api/admin/brands", {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` }
     }).then(res => setAllBrands(res.data.brands));
 
     api.get("/api/admin/categories", {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` }
     }).then(res => setCategories(res.data));
   }, []);
 

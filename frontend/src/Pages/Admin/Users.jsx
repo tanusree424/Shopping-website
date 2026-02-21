@@ -23,7 +23,7 @@ const Users = () => {
       setLoading(true);
       const res = await api.get("/api/admin/users", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
         },
       });
       setUsers(res.data);

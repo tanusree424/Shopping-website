@@ -10,6 +10,8 @@ use App\Http\Controllers\PermissionController;
  use App\Http\Controllers\BrandController;
  use App\Http\Controllers\AdminProductController;
  use App\Http\Controllers\ProductController;
+ use App\Http\Controllers\BannerController;
+ use App\Http\Controllers\CartController;
  use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
  
 /*
@@ -27,22 +29,30 @@ Route::post("/admin/signup",[AuthController::class,"Adminsignup"]);
 Route::post("/login",[AuthController::class,"login"]);
 
 // Public Routes
- Route::get('/parent-categories', [CategoryController::class, "fetchParentCategories"]);
- Route::get("/categories", [CategoryController::class ,"fetchAllCategories"]);
- Route::get("/categories/{slug}", [CategoryController::class,"fetchCategoryWiseProducts"]);
- Route::get("/product/{slug}", [ProductController::class,"product"]);
- Route::get("/similar-product/{slug}", [ProductController::class,'fetchSimilarProducts']);
-Route::get("/products",[ProductController::class,'fetchAllProducts']);
-Route::get("/filter-products",[ProductController::class,'index']);
-Route::get("/featured",[ProductController::class,"featuredProducts"]);
-Route::get("/recent",[ProductController::class, "reacentProducts"]);
-Route::get("/brands",[BrandController::class ,"index"]);
+  Route::get('/parent-categories', [CategoryController::class, "fetchParentCategories"]);
+  Route::get("/categories", [CategoryController::class ,"fetchAllCategories"]);
+  Route::get("/categories/{slug}", [CategoryController::class,"getProductsBySlug"]);
+  Route::get("/product/{slug}", [ProductController::class,"product"]);
+  Route::get("/similar-product/{slug}", [ProductController::class,'fetchSimilarProducts']);
+  Route::get("/products",[ProductController::class,'fetchAllProducts']);
+  Route::get("/filter-products",[ProductController::class,'index']);
+  Route::get("/featured",[ProductController::class,"featuredProducts"]);
+  Route::get("/recent",[ProductController::class, "reacentProducts"]);
+  Route::get("/brands",[BrandController::class ,"index"]);
+  Route::get("/brands/{slug}",[BrandController::class,"BrandWiseProduct"]);
+  Route::get("/banners",[BannerController::class ,"index"]);
+
 Route::get('/cloudinary-test', function () {
     return Cloudinary::getConfiguration();
 });
 
+
 Route::middleware("auth:sanctum")->group(function(){
+  Route::post("/add-to-cart",[CartController::class,"addedToCart"]);
    Route::get("/logout", [AuthController::class,"userLogout"]);
+  Route::get("/cartlist",[CartController::class, "cartList"]);
+  Route::put("/increase-quantity/{id}",[CartController::class,'updateIncreaseQuantity']);
+  Route::put("/decrease-quantity/{id}",[CartController::class,'updateDecreaseQuantity']);
 });
 Route::middleware('auth:sanctum')->prefix("admin")->group(function () {
  //Auth Routes
@@ -69,5 +79,12 @@ Route::middleware('auth:sanctum')->prefix("admin")->group(function () {
   Route::put("/users/{id}", [userController::class, "editUser"]);
     Route::delete("/users/{id}", [userController::class, "deleteUser"]);
   Route::post("/users/{user}/roles" , [userController::class, "assignRoles"]);
+
+  // website baanner route
+
+  Route::get("/banners",[BannerController::class ,"index"]);
+  Route::post("/banners",[BannerController::class,"store"]);
+  Route::put("/banners/{id}",[BannerController::class,"update"]);
+  Route::delete("/banners/{id}",[BannerController::class,"destroy"]);
 });
 

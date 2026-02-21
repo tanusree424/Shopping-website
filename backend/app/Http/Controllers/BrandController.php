@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Brand;
+use App\Models\Product;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 class BrandController extends Controller
 {
@@ -133,17 +134,17 @@ class BrandController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        if (!auth()->user()->hasRole("Admin") && !auth()->user()->hasPermissionTo("delete_product")) {
-            return response()->json(["message"=>"Unauthorized"],403);
-        }
+  public function BrandWiseProduct(string $slug)
+{
+    $brand = Brand::where("slug", $slug)
+        ->with("products.images", "products.category", "products.variants.images","products")
+        ->first();
 
-        $brand = Brand::find($id);
-        if (!$brand) {
-            return response()->json(["message"=>"Brand not found"],404);
-        }
-        $brand->delete();
-        return response()->json(["message"=>"Brand deleted successfully"],200);
+    if (!$brand) {
+        return response()->json(["message" => "Brand Not Found"], 404);
     }
+
+    return response()->json($brand);
+}
+
 }

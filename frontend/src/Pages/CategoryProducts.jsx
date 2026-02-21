@@ -5,88 +5,103 @@ import HeaderNavBar from './HeaderNavBar';
 import Footer from './Footer';
 import api from './Api/Api';
 import "../assets/css/productImage.css";
-const CategoryProducts = () => {
-    const { slug } = useParams();
-    const [category, setCategory] = useState(null);
 
-    const fetchCategoryProducts = async () => {
+const CategoryProducts = () => {
+
+    const { category_slug, brand_slug } = useParams();
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const fetchProducts = async () => {
         try {
-            const response = await api.get(`/api/categories/${slug}`);
-          //  console.log(response.data);
-            setCategory(response.data); // পুরো category object রাখো
+            setLoading(true);
+
+            let response;
+
+            if (category_slug) {
+                response = await api.get(`/api/categories/${category_slug}`);
+            } 
+            else if (brand_slug) {
+                response = await api.get(`/api/brands/${brand_slug}`);
+            } 
+            else {
+                return;
+            }
+            console.log(response.data)
+            setData(response.data);
+
         } catch (error) {
             console.log(error?.response?.data?.message || error?.message);
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchCategoryProducts();
-    }, [slug]);
+        fetchProducts();
+    }, [category_slug, brand_slug]);
 
-    if (!category) return <div>Loading...</div>;
+    if (loading) return <div className="text-center mt-5">Loading...</div>;
+
+    if (!data || !data || data.length === 0) {
+        return <div className="text-center mt-5">No Products Found</div>;
+    }
 
     return (
         <>
-        <Topbar/>
-        <HeaderNavBar/>
-        <div class="container-fluid pt-5 pb-3">
-            <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">{category.name}</span></h2>
-            <div class="row px-xl-5">
-                {
-                    category.products.map((p, i) => (
-                        <>
-                            <div class="col-lg-3 col-md-4 col-sm-6 pb-1" key={i + 1}>
-                                <div class="product-item bg-light mb-4">
-                                    <div class="product-img position-relative overflow-hidden">
-                                        {p.images?.length > 0 && (
-                                            <img class="img-fluid w-100 h-200 product-img-fixed" src={p.images[0].image} width="200" alt={p.name} />
-                                        )}
+            <Topbar />
+            <HeaderNavBar />
 
+            <div className="container-fluid pt-5 pb-3">
+                <h2 className="section-title position-relative text-uppercase mx-xl-5 mb-4">
+                    <span className="bg-secondary pr-3">{data.name}</span>
+                </h2>
 
-                                        <div class="product-action">
-                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="text-center py-4">
-                                        <Link class="h6 text-decoration-none text-truncate" to={`/products/${p.slug}`}>{p.name.substr(0, 25)}</Link>
-                                        <div class="d-flex align-items-center justify-content-center mt-2">
-                                            {
-                                                p.discount_price !== null ? (
-                                                    <>
-                                                        <h5>${p.discount_price}</h5><h6 class="text-muted ml-2"><del>${p.price}</del></h6>
-                                                    </>
-                                                )
-                                                    : (
-                                                        <>
-                                                            <h5>${p.price}</h5>
-                                                        </>
-                                                    )
+                <div className="row px-xl-5">
+                    {data?.map((p) => (
+                        <div className="col-lg-3 col-md-4 col-sm-6 pb-1" key={p.id}>
+                            <div className="product-item bg-light mb-4">
 
-
-                                            }
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-center mb-1">
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small>(99)</small>
-                                        </div>
-                                    </div>
+                                <div className="product-img position-relative overflow-hidden">
+                                    {p.images?.length > 0 && (
+                                        <img
+                                            className="img-fluid w-100 product-img-fixed"
+                                            src={p.images[0].image}
+                                            alt={p.name}
+                                        />
+                                    )}
                                 </div>
+
+                                <div className="text-center py-4">
+                                    <Link
+                                        className="h6 text-decoration-none text-truncate"
+                                        to={`/products/${p.slug}`}
+                                    >
+                                        {p.name.slice(0, 25)}
+                                    </Link>
+
+                                    <div className="d-flex align-items-center justify-content-center mt-2">
+                                        {p.discount_price ? (
+                                            <>
+                                                <h5>${p.discount_price}</h5>
+                                                <h6 className="text-muted ml-2">
+                                                    <del>${p.price}</del>
+                                                </h6>
+                                            </>
+                                        ) : (
+                                            <h5>${p.price}</h5>
+                                        )}
+                                    </div>
+
+                                </div>
+
                             </div>
-                        </>
-                    ))
-                }
-
-
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>
-        <Footer/>
+
+            <Footer />
         </>
     );
 };

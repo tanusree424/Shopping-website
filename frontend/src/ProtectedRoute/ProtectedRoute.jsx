@@ -7,7 +7,7 @@ import { Outlet } from 'react-router-dom'
 const AdminProtectedRoute = () => {
   const [isAuth, setIsAuth] = useState(null)
 
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("adminToken")
  const authRoute = async () => {
       if (!token) {
         setIsAuth(false)

@@ -20,7 +20,7 @@ const Brands = () => {
         try {
             const response = await api.get("/api/admin/brands",{
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
                 },
 
 

@@ -16,7 +16,7 @@ const AddPermission = ({ autoclose, fetchPermissions, EditPermission, EditPermis
             // On success, close the modal
             const response = await api.put(`/api/admin/permissions/${EditPermission.id}`, updatedPermission, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
                 },
             });
             toast.success("Permission Updated Successfully");
