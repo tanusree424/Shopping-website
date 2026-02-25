@@ -52,7 +52,7 @@ class OrderController extends Controller
                 $subtotal += $item->price * $item->quantity;
             }
 
-            $shipping = $subtotal > 1000 ? 50 : 0;
+            $shipping = $subtotal < 1000 ? 50 : 0;
             $total = $subtotal + $shipping;
 
             // ================= CREATE ORDER =================

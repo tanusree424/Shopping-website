@@ -120,24 +120,24 @@ public function cartList()
     $cartItems = Cart::where('user_id', $user->id)
         ->with([
             'product.images',
-            'variant.images',
-            'variant.product'
+            'variants.images',
+            'variants.product'
         ])
         ->get();
 
     $formattedCart = $cartItems->map(function ($cart) {
 
         // 🔥 Variant case
-        if ($cart->product_variant_id && $cart->variant) {
+        if ($cart->product_variant_id && $cart->variants) {
 
             return [
                 "cart_id" => $cart->id,
                 "type" => "variant",
-                "product_name" => $cart->variant->product->name,
-                "color" => $cart->variant->color,
-                "price" => $cart->variant->price,
+                "product_name" => $cart->variants->product->name,
+                "color" => $cart->variants->color,
+                "price" => $cart->variants->price,
                 "quantity" => $cart->quantity,
-                "image" => optional($cart->variant->images->first())->image
+                "image" => optional($cart->variants->images->first())->image
             ];
         }
 
@@ -269,12 +269,15 @@ public function cartProductDetails(Request $request)
         ], 401);
     }
 
-    // query string থেকে ids নাও
     $ids = explode(',', $request->ids);
 
     $cartItems = Cart::whereIn('id', $ids)
         ->where('user_id', $user->id)
-        ->with('product.images','variants.images')
+        ->with([
+            'product.images',
+            'variants.images',
+            'variants.product'
+        ])
         ->get();
 
     if ($cartItems->isEmpty()) {
@@ -283,7 +286,34 @@ public function cartProductDetails(Request $request)
         ], 404);
     }
 
-    return response()->json($cartItems);
+    $formatted = $cartItems->map(function ($cart) {
+
+        // ✅ যদি variant থাকে
+        if ($cart->product_variant_id && $cart->variants) {
+
+            return [
+                "cart_id" => $cart->id,
+                "type" => "variant",
+                "product_name" => $cart->variants->product->name,
+                "color" => $cart->variants->color,
+                "price" => $cart->variants->price,
+                "quantity" => $cart->quantity,
+                "image" => optional($cart->variants->images->first())->image,
+            ];
+        }
+
+        // ✅ normal product
+        return [
+            "cart_id" => $cart->id,
+            "type" => "product",
+            "product_name" => $cart->product->name,
+            "price" => $cart->product->discount_price ?? $cart->product->price,
+            "quantity" => $cart->quantity,
+            "image" => optional($cart->product->images->first())->image,
+        ];
+    });
+
+    return response()->json($formatted);
 }
 }
 

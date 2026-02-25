@@ -16,7 +16,7 @@ public function product()
     return $this->belongsTo(Product::class);
 }
 
-public function variant()
+public function variants()
 {
     return $this->belongsTo(ProductVariant::class, 'product_variant_id');
 }

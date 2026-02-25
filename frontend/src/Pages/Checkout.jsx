@@ -29,7 +29,7 @@ const Checkout = () => {
         state: "",
         zip: "",
     });
-
+console.log(products)
     // ================= Fetch Selected Products =================
     const fetchProductDetails = async (cartIds) => {
         try {
@@ -196,8 +196,9 @@ const Checkout = () => {
                             <h6>Products</h6>
 
                             {products.map((item) => (
-                                <div className="d-flex justify-content-between" key={item.id}>
-                                    <p>{item.product?.name} x {item.quantity}</p>
+                                <div className="d-flex justify-content-between" key={item.cart_id}>
+                                    <img src={item.image} alt={item.product_name} className="img-fluid" style={{ width: "50px", height: "50px" }} />
+                                    <p>{item.product_name} x {item.quantity}</p>
                                     <p>₹{Number(item.price) * item.quantity}</p>
                                 </div>
                             ))}
