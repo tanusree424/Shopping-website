@@ -17,7 +17,7 @@ const RecentProducts = () => {
     useEffect(() => {
       fetchRecentProducts()
     }, [])
-    
+    console.log(recentProducts)
   return (
      <div class="container-fluid pt-5 pb-3">
         <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Recent Products</span></h2>
@@ -37,7 +37,7 @@ const RecentProducts = () => {
                         </div>
                     </div>
                     <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="">{product?.name.substr(0,15)}</a>
+                        <a class="h6 text-decoration-none text-truncate" href={`category/${product?.category?.slug}`}>{product?.name.substr(0,20)}</a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
                             <h5>{product.discount_price ? product.discount_price : product.price}</h5><h6 class="text-muted ml-2"><del>{product.price}</del></h6>
                         </div>

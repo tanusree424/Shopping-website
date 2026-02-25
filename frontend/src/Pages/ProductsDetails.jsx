@@ -14,6 +14,7 @@ const ProductsDetails = () => {
   const [similarProducts, setSimilarProducts] = useState([]);
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
+  const [VarientId, setVarientId] = useState(null);
   const dispatch = useDispatch();
 
   const fetchProduct = async () => {
@@ -32,34 +33,42 @@ const ProductsDetails = () => {
     setSelectedVariant(null);
   }, [slug]);
 
-const handleAddToCart = async (productDetails) => {
+const handleAddToCart = async () => {
   try {
-    const response = await api.post("/api/add-to-cart", {
-      product_id: productDetails.id,
+
+    let payload = {
       quantity: 1,
-    } , {
-      headers:
+    };
+
+    // যদি variant select করা থাকে
+    if (selectedVariant) {
+      payload.product_variant_id = selectedVariant.id;
+    } 
+    // না থাকলে শুধু product যাবে
+    else {
+      payload.product_id = product.id;
+    }
+
+    console.log("Sending payload:", payload);
+
+    const response = await api.post(
+      "/api/add-to-cart",
+      payload,
       {
-      Authorization : `Bearer ${localStorage.getItem("userToken")}`
-    }});
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        },
+      }
+    );
 
     toast.success(response.data.message);
-
-    // চাইলে redux update করতে পারো
-    dispatch(addToCart(productDetails));
+    dispatch(addToCart(payload));
 
   } catch (error) {
-    console.log(error);
-
-    if (error.response?.status === 401) {
-      toast.error("Please login first");
-    } else {
-      console.log(error.response);
-  console.log(error.response.data);
-    }
+    console.log(error?.response?.data);
+    toast.error(error?.response?.data?.message || error?.message);
   }
 };
-
   const handleColorSelect = (color) => {
     setSelectedColor(color);
 
@@ -69,6 +78,7 @@ const handleAddToCart = async (productDetails) => {
 
     setSelectedVariant(variant || null);
   };
+ 
 
   const uniqueColors = product?.variants
     ? [...new Map(

@@ -48,11 +48,15 @@ Route::get('/cloudinary-test', function () {
 
 
 Route::middleware("auth:sanctum")->group(function(){
-  Route::post("/add-to-cart",[CartController::class,"addedToCart"]);
+  Route::post("/add-to-cart",[CartController::class,"addToCart"]);
    Route::get("/logout", [AuthController::class,"userLogout"]);
   Route::get("/cartlist",[CartController::class, "cartList"]);
   Route::put("/increase-quantity/{id}",[CartController::class,'updateIncreaseQuantity']);
   Route::put("/decrease-quantity/{id}",[CartController::class,'updateDecreaseQuantity']);
+    Route::delete("/remove-cart-item/{id}",[CartController::class,'deleteCartItem']);
+    Route::get("/cart-count",[CartController::class,'cartProductCount']);
+   Route::get('/cart-product-details', [CartController::class, 'cartProductDetails']);
+    
 });
 Route::middleware('auth:sanctum')->prefix("admin")->group(function () {
  //Auth Routes

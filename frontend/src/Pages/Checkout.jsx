@@ -1,206 +1,263 @@
-import React from 'react'
-import Topbar from './Topbar'
-import HeaderNavBar from './HeaderNavBar'
-import Footer from './Footer'
-const Checkout = () => {
-  return (
-    <div>
-      <Topbar/>
-      <HeaderNavBar/>
-      <div class="container-fluid">
-        <div class="row px-xl-5">
-            <div class="col-12">
-                <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="#">Home</a>
-                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
-                    <span class="breadcrumb-item active">Checkout</span>
-                </nav>
-            </div>
-        </div>
-    </div>
-     <div class="container-fluid">
-        <div class="row px-xl-5">
-            <div class="col-lg-8">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
-                <div class="bg-light p-30 mb-5">
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>First Name</label>
-                            <input class="form-control" type="text" placeholder="John"/>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Last Name</label>
-                            <input class="form-control" type="text" placeholder="Doe"/>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>E-mail</label>
-                            <input class="form-control" type="text" placeholder="example@email.com"/>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Mobile No</label>
-                            <input class="form-control" type="text" placeholder="+123 456 789"/>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Address Line 1</label>
-                            <input class="form-control" type="text" placeholder="123 Street"/>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Address Line 2</label>
-                            <input class="form-control" type="text" placeholder="123 Street"/>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Country</label>
-                            <select class="custom-select">
-                                <option selected>United States</option>
-                                <option>Afghanistan</option>
-                                <option>Albania</option>
-                                <option>Algeria</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>City</label>
-                            <input class="form-control" type="text" placeholder="New York"/>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>State</label>
-                            <input class="form-control" type="text" placeholder="New York"/>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>ZIP Code</label>
-                            <input class="form-control" type="text" placeholder="123"/>
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="newaccount"/>
-                                <label class="custom-control-label" for="newaccount">Create an account</label>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="shipto"/>
-                                <label class="custom-control-label" for="shipto"  data-toggle="collapse" data-target="#shipping-address">Ship to different address</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="collapse mb-5" id="shipping-address">
-                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Shipping Address</span></h5>
-                    <div class="bg-light p-30">
-                        <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label>First Name</label>
-                                <input class="form-control" type="text" placeholder="John"/>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>Last Name</label>
-                                <input class="form-control" type="text" placeholder="Doe"/>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>E-mail</label>
-                                <input class="form-control" type="text" placeholder="example@email.com"/>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>Mobile No</label>
-                                <input class="form-control" type="text" placeholder="+123 456 789"/>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>Address Line 1</label>
-                                <input class="form-control" type="text" placeholder="123 Street"/>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>Address Line 2</label>
-                                <input class="form-control" type="text" placeholder="123 Street"/>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>Country</label>
-                                <select class="custom-select">
-                                    <option selected>United States</option>
-                                    <option>Afghanistan</option>
-                                    <option>Albania</option>
-                                    <option>Algeria</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>City</label>
-                                <input class="form-control" type="text" placeholder="New York"/>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>State</label>
-                                <input class="form-control" type="text" placeholder="New York"/>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>ZIP Code</label>
-                                <input class="form-control" type="text" placeholder="123"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
-                <div class="bg-light p-30 mb-5">
-                    <div class="border-bottom">
-                        <h6 class="mb-3">Products</h6>
-                        <div class="d-flex justify-content-between">
-                            <p>Product Name 1</p>
-                            <p>$150</p>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <p>Product Name 2</p>
-                            <p>$150</p>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <p>Product Name 3</p>
-                            <p>$150</p>
-                        </div>
-                    </div>
-                    <div class="border-bottom pt-3 pb-2">
-                        <div class="d-flex justify-content-between mb-3">
-                            <h6>Subtotal</h6>
-                            <h6>$150</h6>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium">$10</h6>
-                        </div>
-                    </div>
-                    <div class="pt-2">
-                        <div class="d-flex justify-content-between mt-2">
-                            <h5>Total</h5>
-                            <h5>$160</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-5">
-                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Payment</span></h5>
-                    <div class="bg-light p-30">
-                        <div class="form-group">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="paypal"/>
-                                <label class="custom-control-label" for="paypal">Paypal</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="directcheck"/>
-                                <label class="custom-control-label" for="directcheck">Direct Check</label>
-                            </div>
-                        </div>
-                        <div class="form-group mb-4">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="banktransfer"/>
-                                <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
-                            </div>
-                        </div>
-                        <button class="btn btn-block btn-primary font-weight-bold py-3">Place Order</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-      <Footer/>
-    </div>
-  )
-}
+import React, { useEffect, useState } from "react";
+import Topbar from "./Topbar";
+import HeaderNavBar from "./HeaderNavBar";
+import Footer from "./Footer";
+import api from "./Api/Api";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-export default Checkout
+const Checkout = () => {
+    const location = useLocation();
+        const Navigate = useNavigate();
+    const selectedCartIds = location.state?.selectedCartIds || [];
+
+    const [products, setProducts] = useState([]);
+    const [createAccount, setCreateAccount] = useState(false);
+    const [shipDifferent, setShipDifferent] = useState(false);
+
+    const paymentMethods = ["paypal", "cod", "credit_card", "bank_transfer", "razorpay", "stripe", "paystack", 'UPİ', "paytm", "flutterwave", "mollie", "square", "2checkout", "authorize_net", "braintree", "worldpay", "adyen", "skrill", "netbanking"];
+    const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0])
+    const [billingData, setBillingData] = useState({
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone: "",
+        address1: "",
+        address2: "",
+        country: "",
+        city: "",
+        state: "",
+        zip: "",
+    });
+
+    // ================= Fetch Selected Products =================
+    const fetchProductDetails = async (cartIds) => {
+        try {
+            const response = await api.get(
+                `/api/cart-product-details?ids=${cartIds.join(",")}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+                    },
+                }
+            );
+
+            setProducts(response.data);
+        } catch (error) {
+            console.log(error?.response?.data?.message || error?.message);
+        }
+    };
+
+    useEffect(() => {
+        if (selectedCartIds.length > 0) {
+            fetchProductDetails(selectedCartIds);
+        }
+    }, [selectedCartIds]);
+
+    // ================= Calculations =================
+    const subtotal = products.reduce(
+        (total, item) => total + Number(item.price) * item.quantity,
+        0
+    );
+
+    const shipping = subtotal > 1000 ? 50 : 0;
+    const total = subtotal + shipping;
+
+    const handleChange = (e) => {
+        setBillingData({
+            ...billingData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handlePlaceOrder = () => {
+        console.log("Billing:", billingData);
+        console.log("Payment:", paymentMethod);
+        console.log("Products:", products);
+    };
+    if (createAccount) {
+        Navigate("/signup", { state: { billingData } });
+    }
+
+    return (
+        <div>
+            <Topbar />
+            <HeaderNavBar />
+
+            <div className="container-fluid">
+                <div className="row px-xl-5">
+                    <div className="col-lg-8">
+                        <h5 className="section-title position-relative text-uppercase mb-3">
+                            <span className="bg-secondary pr-3">Billing Address</span>
+                        </h5>
+
+                        <div className="bg-light p-30 mb-5">
+                            <div className="row">
+
+                                <div className="col-md-6 form-group">
+                                    <label>First Name</label>
+                                    <input className="form-control" name="first_name" onChange={handleChange} />
+                                </div>
+
+                                <div className="col-md-6 form-group">
+                                    <label>Last Name</label>
+                                    <input className="form-control" name="last_name" onChange={handleChange} />
+                                </div>
+
+                                <div className="col-md-6 form-group">
+                                    <label>E-mail</label>
+                                    <input className="form-control" name="email" onChange={handleChange} />
+                                </div>
+
+                                <div className="col-md-6 form-group">
+                                    <label>Mobile No</label>
+                                    <input className="form-control" name="phone" onChange={handleChange} />
+                                </div>
+
+                                <div className="col-md-6 form-group">
+                                    <label>Address Line 1</label>
+                                    <input className="form-control" name="address1" onChange={handleChange} />
+                                </div>
+
+                                <div className="col-md-6 form-group">
+                                    <label>Address Line 2</label>
+                                    <input className="form-control" name="address2" onChange={handleChange} />
+                                </div>
+
+                                <div className="col-md-6 form-group">
+                                    <label>Country</label>
+                                    <input className="form-control" name="country" onChange={handleChange} />
+                                </div>
+
+                                <div className="col-md-6 form-group">
+                                    <label>City</label>
+                                    <input className="form-control" name="city" onChange={handleChange} />
+                                </div>
+
+                                <div className="col-md-6 form-group">
+                                    <label>State</label>
+                                    <input className="form-control" name="state" onChange={handleChange} />
+                                </div>
+
+                                <div className="col-md-6 form-group">
+                                    <label>ZIP Code</label>
+                                    <input className="form-control" name="zip" onChange={handleChange} />
+                                </div>
+
+                                {/* Create Account */}
+                                <div className="col-md-12 form-group">
+                                    <div className="custom-control custom-checkbox">
+                                        <input
+                                            type="checkbox"
+                                            className="custom-control-input"
+                                            id="newaccount"
+                                            checked={createAccount}
+                                            onChange={() => setCreateAccount(!createAccount)}
+                                        />
+                                        <label className="custom-control-label" htmlFor="newaccount">
+                                            Create an account
+                                        </label>
+                                    </div>
+                                </div>
+
+                                {/* Ship Different */}
+                                <div className="col-md-12">
+                                    <div className="custom-control custom-checkbox">
+                                        <input
+                                            type="checkbox"
+                                            className="custom-control-input"
+                                            id="shipto"
+                                            checked={shipDifferent}
+                                            onChange={() => setShipDifferent(!shipDifferent)}
+                                        />
+                                        <label className="custom-control-label" htmlFor="shipto">
+                                            Ship to different address
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        {/* Shipping Section Controlled */}
+                        {shipDifferent && (
+                            <div className="bg-light p-30 mb-5">
+                                <h6>Shipping Address</h6>
+                                <input className="form-control mb-2" placeholder="Shipping Address Line 1" />
+                                <input className="form-control mb-2" placeholder="City" />
+                            </div>
+                        )}
+
+                    </div>
+
+                    {/* ===== ORDER SUMMARY ===== */}
+                    <div className="col-lg-4">
+                        <div className="bg-light p-30 mb-5">
+                            <h6>Products</h6>
+
+                            {products.map((item) => (
+                                <div className="d-flex justify-content-between" key={item.id}>
+                                    <p>{item.product?.name} x {item.quantity}</p>
+                                    <p>₹{Number(item.price) * item.quantity}</p>
+                                </div>
+                            ))}
+
+                            <hr />
+
+                            <div className="d-flex justify-content-between">
+                                <span>Subtotal</span>
+                                <span>₹{subtotal}</span>
+                            </div>
+
+                            <div className="d-flex justify-content-between">
+                                <span>Shipping</span>
+                                <span>₹{shipping}</span>
+                            </div>
+
+                            <hr />
+
+                            <div className="d-flex justify-content-between">
+                                <strong>Total</strong>
+                                <strong>₹{total}</strong>
+                            </div>
+                        </div>
+
+                        {/* ===== PAYMENT ===== */}
+                        <div className="bg-light p-30">
+                            <h5 className="mb-3">Payment Method</h5>
+                            {paymentMethods.map((method) => (
+                                <div className="custom-control custom-radio mb-2" key={method}>
+                                    <input
+                                        type="radio"
+                                        name="payment_method"
+                                        className="custom-control-input"
+                                        id={method}
+                                        checked={paymentMethod === method}
+                                        onChange={() => setPaymentMethod(method)}
+                                    />
+                                    <label className="custom-control-label" htmlFor={method}>
+                                        {method.charAt(0).toUpperCase() + method.slice(1)}
+                                    </label>
+                                </div>
+                            ))}
+
+
+
+                            <button
+                                className="btn btn-block btn-primary font-weight-bold py-3 mt-3"
+                                onClick={handlePlaceOrder}
+                            >
+                                Place Order
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <Footer />
+        </div>
+    );
+};
+
+export default Checkout;
