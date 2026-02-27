@@ -25,8 +25,9 @@ import ProductsDetails from './Pages/ProductsDetails.jsx'
 import Signup from './Pages/Signup.jsx'
 import Login from "./Pages/Login.jsx"
 import AdminBanner from './Pages/Admin/Banner/AdminBanner.jsx'
+import { useCart } from './Pages/Context/CartContext.jsx'
 function App() {
- 
+  const { cartItemsCount, setCartItemsCount , CartTotal } = useCart();
   return (
     <>
     <Toaster position="top-right" reverseOrder={false} />
@@ -39,9 +40,9 @@ function App() {
   <Route path="/checkout" element={<Checkout />} />
   <Route path="/contact" element={<Contact />} />
     <Route path='*' element={<NotFound/>} />
-    <Route path='category/:category_slug' element={<CategoryProducts/>} />
-    <Route path='/products/:slug' element={<ProductsDetails/>}/>
-    <Route path='/brands/:brand_slug' element={<CategoryProducts/>}/>
+    <Route path='category/:category_slug' element={<CategoryProducts cartItemsCount={cartItemsCount}  setCartItemsCount={setCartItemsCount} CartTotal={CartTotal}/>} />
+    <Route path='/products/:slug' element={<ProductsDetails cartItemsCount={cartItemsCount} setCartItemsCount={setCartItemsCount} CartTotal={CartTotal}/>}/>
+    <Route path='/brands/:brand_slug' element={<CategoryProducts cartItemsCount={cartItemsCount} setCartItemsCount={setCartItemsCount} CartTotal={CartTotal}/>}/>
     <Route path="signup" element={<Signup />} /> 
     <Route path="login" element={<Login />} /> 
   {/* Admin Public */}

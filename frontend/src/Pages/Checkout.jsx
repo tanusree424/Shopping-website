@@ -5,7 +5,7 @@ import Footer from "./Footer";
 import api from "./Api/Api";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-
+import toast from "react-hot-toast";
 const Checkout = () => {
     const location = useLocation();
         const Navigate = useNavigate();
@@ -15,7 +15,7 @@ const Checkout = () => {
     const [createAccount, setCreateAccount] = useState(false);
     const [shipDifferent, setShipDifferent] = useState(false);
 
-    const paymentMethods = ["paypal", "cod", "credit_card", "bank_transfer", "razorpay", "stripe", "paystack", 'UPİ', "paytm", "flutterwave", "mollie", "square", "2checkout", "authorize_net", "braintree", "worldpay", "adyen", "skrill", "netbanking"];
+    const paymentMethods = ["paypal", "cod", "credit_card", "bank_transfer", "razorpay", "stripe", "paystack", 'UPİ', "paytm", "flutterwave", "mollie", "square", "2checkout", "authorize_net", "braintree", "worldpay", "adyen", "skrill", "netbanking", 'Cash On Delivery'];
     const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0])
     const [billingData, setBillingData] = useState({
         first_name: "",
@@ -70,10 +70,27 @@ console.log(products)
         });
     };
 
-    const handlePlaceOrder = () => {
+    const handlePlaceOrder = async () => {
         console.log("Billing:", billingData);
         console.log("Payment:", paymentMethod);
         console.log("Products:", products);
+        try {
+          const response  = await api.post("/api/place-order", {
+            billing: [billingData],
+            payment_method: paymentMethod,
+            cart_ids: selectedCartIds
+          } , {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+            },
+          });
+          console.log(response.data);
+            toast.success("Order placed successfully!");
+        } catch (error) {
+            console.log(error?.response?.data?.message || error?.message);
+            toast.error(error?.response?.data?.message || error?.message  || "Failed to place order. Please try again.");
+
+        }
     };
     if (createAccount) {
         Navigate("/signup", { state: { billingData } });

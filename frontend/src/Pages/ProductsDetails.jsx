@@ -7,8 +7,9 @@ import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../redux/Slices/CartSlice';
 import Footer from './Footer';
+import { useCart } from './Context/CartContext';
 
-const ProductsDetails = () => {
+const ProductsDetails = ({ CartTotal }) => {
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [similarProducts, setSimilarProducts] = useState([]);
@@ -16,7 +17,7 @@ const ProductsDetails = () => {
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [VarientId, setVarientId] = useState(null);
   const dispatch = useDispatch();
-
+  const { cartItemsCount, setCartItemsCount } = useCart();
   const fetchProduct = async () => {
     try {
       const response = await api.get(`/api/similar-product/${slug}`);
@@ -60,7 +61,7 @@ const handleAddToCart = async () => {
         },
       }
     );
-
+  
     toast.success(response.data.message);
     dispatch(addToCart(payload));
 
@@ -163,7 +164,11 @@ console.log(product)
             <div className="d-flex gap-3 mt-4">
               <button
                 className="btn btn-primary"
-                onClick={() => handleAddToCart(selectedVariant || product)}
+                onClick={() =>{ handleAddToCart(selectedVariant || product) 
+                  setCartItemsCount(prev => prev + 1) 
+                 CartTotal()
+                }
+              }
               >
                 <i className="fa fa-shopping-cart"></i> Add to Cart
               </button>

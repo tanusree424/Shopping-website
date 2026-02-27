@@ -80,7 +80,7 @@ const handleDeleteRole = async (roleId) => {
   try {
   const response=  await api.delete(`/api/admin/roles/${roleId}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
       },
     });
 

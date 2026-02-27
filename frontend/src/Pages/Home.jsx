@@ -24,18 +24,19 @@ import "../assets/lib/owlcarousel/assets/owl.theme.green.min.css";
 import "../assets/lib/owlcarousel/assets/owl.video.play.png";
 import "../assets/lib/owlcarousel/owl.carousel.js"
 import "../assets/lib/owlcarousel/owl.carousel.min.js"
-
+import { useCart } from './Context/CartContext';
 const Home = () => {
+  const { cartItemsCount, setCartItemsCount } = useCart();
   return (
     <div>
       <Topbar/>
       <HeaderNavBar/>
       <Hero/>
-      <Features/>
-      <Categories/>
-      <FeatureProducts/>
+      <Features cartItemsCount={cartItemsCount} setCartItemsCount={setCartItemsCount}/>
+      <Categories cartItemsCount={cartItemsCount} setCartItemsCount={setCartItemsCount} />
+      <FeatureProducts cartItemsCount={cartItemsCount} setCartItemsCount={setCartItemsCount} />
       <Offers/>
-      <RecentProducts/>
+      <RecentProducts cartItemsCount={cartItemsCount} setCartItemsCount={setCartItemsCount} />
       <Vendors/>
       <Footer/>
     </div>

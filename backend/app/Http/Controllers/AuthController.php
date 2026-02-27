@@ -19,6 +19,8 @@ class AuthController extends Controller
     \Log::info("Creating user with data: ", $validated);
 
     $user = User::create($validated);
+
+    $user->assignRole("User"); // 🔥 EXACT role name from DB
    
 
     // 🔥 EXACT role name from DB

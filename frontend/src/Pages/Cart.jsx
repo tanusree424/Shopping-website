@@ -4,10 +4,12 @@ import Topbar from "./Topbar";
 import HeaderNavBar from "./HeaderNavBar";
 import Footer from "./Footer";
 import api from "./Api/Api";
+import { useCart } from "./Context/CartContext";
 
 const Cart = () => {
   const userToken = localStorage.getItem("userToken");
   const navigate = useNavigate();
+  const { cartItemsCount, setCartItemsCount } = useCart();
 
   const [cartItems, setCartItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -118,6 +120,7 @@ console.log(cartItems)
 
         setCartItems((prev) => prev.filter((item) => item.id !== cartId));
         setSelectedItems((prev) => prev.filter((id) => id !== cartId));
+        setCartItemsCount((prev) => prev - 1);
       } catch (error) {
         console.log(error?.response?.data?.message || error?.message);
       }
@@ -243,7 +246,7 @@ console.log(cartItems)
 
                       <td className="align-middle">
                         <button
-                          onClick={() => removeItem(c.id)}
+                          onClick={() => removeItem(c.cart_id)}
                           className="btn btn-sm btn-danger"
                         >
                           <i className="fa fa-times"></i>

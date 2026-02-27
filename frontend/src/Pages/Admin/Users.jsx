@@ -51,7 +51,7 @@ const Users = () => {
     try {
       await api.delete(`/api/admin/users/${id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
         },
       });
 
@@ -88,7 +88,7 @@ const Users = () => {
         { roles },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
           },
         }
       );

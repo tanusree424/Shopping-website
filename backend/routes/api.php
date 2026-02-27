@@ -12,6 +12,7 @@ use App\Http\Controllers\PermissionController;
  use App\Http\Controllers\ProductController;
  use App\Http\Controllers\BannerController;
  use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
  use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
  
 /*
@@ -56,6 +57,7 @@ Route::middleware("auth:sanctum")->group(function(){
     Route::delete("/remove-cart-item/{id}",[CartController::class,'deleteCartItem']);
     Route::get("/cart-count",[CartController::class,'cartProductCount']);
    Route::get('/cart-product-details', [CartController::class, 'cartProductDetails']);
+   Route::post("/place-order", [OrderController::class, "placeOrder"]);
     
 });
 Route::middleware('auth:sanctum')->prefix("admin")->group(function () {
