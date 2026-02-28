@@ -9,11 +9,13 @@ use App\Models\Order;
 use App\Models\Order_item;
 use App\Models\Cart;
 use App\Models\Payment;
+use Razorpay\Api\Api;
+use App\Models\OrderTracking;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
-   public function placeOrder(Request $request)
+public function placeOrder(Request $request)
 {
     $user = Auth::user();
 
@@ -37,6 +39,7 @@ class OrderController extends Controller
         $cartItems = Cart::whereIn('id', $request->cart_ids)
             ->where('user_id', $user->id)
             ->with('product')
+            ->lockForUpdate() // prevent race condition
             ->get();
 
         if ($cartItems->isEmpty()) {
@@ -72,19 +75,27 @@ class OrderController extends Controller
             'billing_details' => json_encode($request->billing),
         ]);
 
-        // ================= CREATE ORDER ITEMS =================
+        // ================= CREATE ORDER ITEMS + STOCK CHECK =================
         foreach ($cartItems as $item) {
+
+            if ($item->product->stock < $item->quantity) {
+                throw new \Exception("Insufficient stock for " . $item->product->name);
+            }
+
             Order_item::create([
                 'order_id' => $order->id,
                 'product_id' => $item->product_id,
                 'price' => $item->price,
-                "total" => $item->price * $item->quantity,
                 'quantity' => $item->quantity,
+                'total' => $item->price * $item->quantity,
             ]);
+
+            // Stock minus
+            $item->product->decrement('stock', $item->quantity);
         }
 
         // ================= CREATE PAYMENT =================
-        Payment::create([
+        $payment = Payment::create([
             'order_id' => $order->id,
             'user_id' => $user->id,
             'payment_method' => $request->payment_method,
@@ -95,10 +106,48 @@ class OrderController extends Controller
                 : null,
         ]);
 
+        // ================= CREATE ORDER TRACKING =================
+        OrderTracking::create([
+            'order_id' => $order->id,
+            'status' => 'Order Placed',
+            'description' => 'Your order has been placed successfully.',
+            'created_at' => now()
+        ]);
+
         // ================= CLEAR CART =================
         Cart::whereIn('id', $request->cart_ids)
             ->where('user_id', $user->id)
             ->delete();
+
+        // ================= ONLINE PAYMENT =================
+        if ($request->payment_method !== "Cash On Delivery") {
+
+            $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+
+            $razorpayOrder = $api->order->create([
+                'receipt' => $order->order_number,
+                'amount' => $grandTotal * 100,
+                'currency' => 'INR'
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                "order_id" => $order->id,
+                "razorpay_order_id" => $razorpayOrder['id'],
+                "amount" => $grandTotal
+            ]);
+        }
+
+        // ================= COD CASE =================
+        $order->update(['order_status' => 'confirmed']);
+        $payment->update(['payment_status' => 'paid']);
+
+        OrderTracking::create([
+            'order_id' => $order->id,
+            'status' => 'Confirmed',
+            'description' => 'Order confirmed. It will be shipped soon.',
+        ]);
 
         DB::commit();
 
@@ -117,5 +166,74 @@ class OrderController extends Controller
             "error" => $e->getMessage()
         ], 500);
     }
+}
+
+    public function getUserOrders()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "message" => "Unauthorized"
+            ], 401);
+        }
+
+        $orders = Order::where('user_id', $user->id)
+            ->with(['order_items.product.images', 'order_items.product.variants.images', 'payment'])
+            ->orderBy('ordered_at', 'desc')
+            ->get();
+
+        return response()->json([
+            "orders" => $orders
+        ], 200);
+    }
+public function verifyPayment(Request $request)
+{
+    $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+
+    $payment = $api->payment->fetch($request->razorpay_payment_id);
+
+    $order = Order::find($request->order_id);
+
+    $order->payment->update([
+        'payment_status' => 'paid',
+        'transaction_id' => $payment['id'],
+        'payment_method' => $payment['method']  // 🔥 এখানে method আসবে
+    ]);
+
+    $order->update([
+        'order_status' => 'confirmed'
+    ]);
+
+    return response()->json([
+        "message" => "Payment Verified"
+    ]);
+}
+
+public function getOrderDetails($id)
+{
+    $user = Auth::user();
+
+    if (!$user) {
+        return response()->json([
+            "message" => "Unauthorized"
+        ], 401);
+    }
+
+    $order = Order::where('id', $id)
+        ->where('user_id', $user->id)
+        ->with(['order_items.product.images', 'order_items.product.variants.images', 'payment', 'tracking'])
+        ->first();
+
+    if (!$order) {
+        return response()->json([
+            "message" => "Order not found"
+        ], 404);
+    }
+
+    return response()->json([
+        "order" => $order
+    ], 200);
+
 }
 }

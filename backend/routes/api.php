@@ -58,6 +58,9 @@ Route::middleware("auth:sanctum")->group(function(){
     Route::get("/cart-count",[CartController::class,'cartProductCount']);
    Route::get('/cart-product-details', [CartController::class, 'cartProductDetails']);
    Route::post("/place-order", [OrderController::class, "placeOrder"]);
+   Route::get("/orders", [OrderController::class, "getUserOrders"]);
+   Route::post('/verify-payment', [OrderController::class, 'verifyPayment']);
+   Route::get('/orders/{id}', [OrderController::class, 'getOrderDetails']);
     
 });
 Route::middleware('auth:sanctum')->prefix("admin")->group(function () {

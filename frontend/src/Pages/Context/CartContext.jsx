@@ -1,31 +1,41 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import api from "../Api/Api";
+
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItemsCount, setCartItemsCount] = useState(0);
-    const userToken = localStorage.getItem("userToken");
-    const CartTotal  = async () => {
+
+  const userToken = localStorage.getItem("userToken");
+
+  // ✅ Fetch cart count
+  const CartTotal = async () => {
     try {
-        const response = await api.get("/api/cart-count", {
+      const response = await api.get("/api/cart-count", {
         headers: {
-            Authorization: `Bearer ${userToken}`,
+          Authorization: `Bearer ${userToken}`,
         },
-        });
-        setCartItemsCount(response.data.cart_count);
-        console.log(response.data.cart_count)
+      });
+
+      setCartItemsCount(response.data.cart_count);
     } catch (error) {
-        console.log(error?.response?.data?.message || error?.message);
+      console.log(error?.response?.data?.message || error?.message);
     }
+  };
+
+  // ✅ Correct Hook
+  useEffect(() => {
+    if (userToken) {
+      CartTotal();
+    } else {
+      setCartItemsCount(0);
     }
-    useState(() => {
-        if(userToken){
-            CartTotal();
-        }
-    }, [userToken])
+  }, [userToken]);
 
   return (
-    <CartContext.Provider value={{ cartItemsCount, setCartItemsCount , CartTotal }}>
+    <CartContext.Provider
+      value={{ cartItemsCount, setCartItemsCount, CartTotal }}
+    >
       {children}
     </CartContext.Provider>
   );

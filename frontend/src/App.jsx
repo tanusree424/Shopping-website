@@ -26,6 +26,8 @@ import Signup from './Pages/Signup.jsx'
 import Login from "./Pages/Login.jsx"
 import AdminBanner from './Pages/Admin/Banner/AdminBanner.jsx'
 import { useCart } from './Pages/Context/CartContext.jsx'
+import Orders from './Pages/Orders.jsx'
+import OrderDetails from './Pages/Order_deatils.jsx'
 function App() {
   const { cartItemsCount, setCartItemsCount , CartTotal } = useCart();
   return (
@@ -45,6 +47,8 @@ function App() {
     <Route path='/brands/:brand_slug' element={<CategoryProducts cartItemsCount={cartItemsCount} setCartItemsCount={setCartItemsCount} CartTotal={CartTotal}/>}/>
     <Route path="signup" element={<Signup />} /> 
     <Route path="login" element={<Login />} /> 
+    <Route path="orders" element={<Orders />} />
+    <Route path="orders/:id" element={<OrderDetails />} />
   {/* Admin Public */}
   <Route path="/admin/login" element={<AdminLogin />} />
   <Route path="/admin/signup" element={<AdminSignup />} />

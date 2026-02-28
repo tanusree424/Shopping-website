@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Order_item;
 use App\Models\User;
 use App\Models\Payment;
-
+use App\Models\OrderTracking;
 class Order extends Model
 {
     use HasFactory;
@@ -34,5 +34,10 @@ class Order extends Model
     public function payment()
     {
         return $this->hasOne(Payment::class);
+    }
+
+    public function tracking()
+    {
+        return $this->hasMany(OrderTracking::class);
     }
 }

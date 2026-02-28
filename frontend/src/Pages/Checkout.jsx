@@ -8,14 +8,20 @@ import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 const Checkout = () => {
     const location = useLocation();
-        const Navigate = useNavigate();
+    const Navigate = useNavigate();
     const selectedCartIds = location.state?.selectedCartIds || [];
 
     const [products, setProducts] = useState([]);
     const [createAccount, setCreateAccount] = useState(false);
     const [shipDifferent, setShipDifferent] = useState(false);
+    const paymentMethods = ["Cash On Delivery", "razorpay", 'UPI', 'Net Banking', 'Credit/Debit Card'];
+    useEffect(() => {
+  const script = document.createElement("script");
+  script.src = "https://checkout.razorpay.com/v1/checkout.js";
+  script.async = true;
+  document.body.appendChild(script);
+}, []);
 
-    const paymentMethods = ["paypal", "cod", "credit_card", "bank_transfer", "razorpay", "stripe", "paystack", 'UPİ', "paytm", "flutterwave", "mollie", "square", "2checkout", "authorize_net", "braintree", "worldpay", "adyen", "skrill", "netbanking", 'Cash On Delivery'];
     const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0])
     const [billingData, setBillingData] = useState({
         first_name: "",
@@ -29,7 +35,7 @@ const Checkout = () => {
         state: "",
         zip: "",
     });
-console.log(products)
+    console.log(products)
     // ================= Fetch Selected Products =================
     const fetchProductDetails = async (cartIds) => {
         try {
@@ -75,20 +81,51 @@ console.log(products)
         console.log("Payment:", paymentMethod);
         console.log("Products:", products);
         try {
-          const response  = await api.post("/api/place-order", {
-            billing: [billingData],
-            payment_method: paymentMethod,
-            cart_ids: selectedCartIds
-          } , {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-            },
-          });
-          console.log(response.data);
-            toast.success("Order placed successfully!");
+            const response = await api.post("/api/place-order", {
+                billing: [billingData],
+                payment_method: paymentMethod,
+                cart_ids: selectedCartIds
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+                },
+            });
+            console.log(response.data);
+            if (paymentMethod === "Cash On Delivery") {
+                toast.success("Order Placed Successfully");
+                return;
+            }
+
+
+            // Razorpay Flow
+            const { razorpay_order_id, amount, order_id } = response.data;
+
+            const options = {
+                key: import.meta.env.VITE_RAZORPAY_KEY || "rzp_test_SLRzlqIgnKyGs3",
+                amount: amount * 100,
+                currency: "INR",
+                order_id: razorpay_order_id,
+
+                handler: async function (paymentResponse) {
+
+                 const payment_data = await api.post("/api/verify-payment", {
+                        order_id: order_id,
+                        razorpay_payment_id: paymentResponse.razorpay_payment_id
+                    } , {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+                        },
+                    });
+                    console.log(payment_data.data);
+                    toast.success("Payment Successful!");
+                }
+            };
+
+            const rzp = new window.Razorpay(options);
+            rzp.open();
         } catch (error) {
             console.log(error?.response?.data?.message || error?.message);
-            toast.error(error?.response?.data?.message || error?.message  || "Failed to place order. Please try again.");
+            toast.error(error?.response?.data?.message || error?.message || "Failed to place order. Please try again.");
 
         }
     };

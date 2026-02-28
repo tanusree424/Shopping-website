@@ -121,6 +121,7 @@ console.log(cartItems)
         setCartItems((prev) => prev.filter((item) => item.id !== cartId));
         setSelectedItems((prev) => prev.filter((id) => id !== cartId));
         setCartItemsCount((prev) => prev - 1);
+      //  fetchCart()
       } catch (error) {
         console.log(error?.response?.data?.message || error?.message);
       }
