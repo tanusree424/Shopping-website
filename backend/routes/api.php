@@ -13,7 +13,9 @@ use App\Http\Controllers\PermissionController;
  use App\Http\Controllers\BannerController;
  use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
- use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\AdminPaymentController;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
  
 /*
 |--------------------------------------------------------------------------
@@ -95,5 +97,14 @@ Route::middleware('auth:sanctum')->prefix("admin")->group(function () {
   Route::post("/banners",[BannerController::class,"store"]);
   Route::put("/banners/{id}",[BannerController::class,"update"]);
   Route::delete("/banners/{id}",[BannerController::class,"destroy"]);
+  // Order
+  Route::get("orders",[AdminOrderController::class,"index"]);
+  Route::get("orders/{id}", [AdminOrderController::class,"viewOrderDeatils"]);
+  Route::put("status-change/{id}", [AdminOrderController::class,"changeOrderStatus"]);
+  Route::delete("/order/{id}", [AdminOrderController::class,"deleteOrder"]);
+
+  // Payments
+  Route::get("/payments", [AdminPaymentController::class,"allPayments"]);
+Route::get("/payment/{id}", [AdminPaymentController::class,"paymentOrder"]);
 });
 

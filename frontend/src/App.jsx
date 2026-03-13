@@ -28,6 +28,8 @@ import AdminBanner from './Pages/Admin/Banner/AdminBanner.jsx'
 import { useCart } from './Pages/Context/CartContext.jsx'
 import Orders from './Pages/Orders.jsx'
 import OrderDetails from './Pages/Order_deatils.jsx'
+import Order from './Pages/Admin/Order/Order.jsx'
+import Payments from './Pages/Admin/Payments/Payments.jsx'
 function App() {
   const { cartItemsCount, setCartItemsCount , CartTotal } = useCart();
   return (
@@ -57,6 +59,7 @@ function App() {
   {/* Admin Protected */}
   <Route path="/admin" element={<AdminProtectedRoute />}>
     <Route index element={<AdminHome />} />   {/* /admin */}
+    <Route path='payments' element={<Payments/>}/>
     <Route path="users" element={<Users />} /> {/* /admin/users */}
     <Route path="roles" element={<Roles />} /> {/* /admin/roles */}
     <Route path="permissions" element={<Permissions />} /> {/* /admin/permissions */}
@@ -65,6 +68,7 @@ function App() {
      <Route path="products" element={<Products />} /> {/* /admin/products */}
      <Route path='banner' element={<AdminBanner/>} />
     <Route path="*" element={<NotFound/>} />
+    <Route path='orders' element={<Order/>} />
   </Route>
 
 </Routes>
